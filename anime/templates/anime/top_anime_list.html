@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="anime-list">
+    {% for anime in top_list %}
+        <div class="anime-item">
+            <a href="{% url 'anime:anime_detail' pk=anime.pk slug=anime.slug|default:'temp-slug' %}">
+                {% if anime.poster_kodik %}
+                    <img src="{{ anime.poster_kodik }}" alt="{{ anime.title }}" class="anime-poster">
+                {% else %}
+                    <div class="no-poster">Нет постера</div>
+                {% endif %}
+            </a>
+
+            <div class="anime-content">
+                <div class="anime-header">
+                    <h3 class="anime-title">{{ anime.title }} <span class="anime-rating">★ {{ anime.shikimori_rating|default:"-" }}</span></h3>
+                </div>
+
+                <div class="anime-details">
+                    <!-- Режим 1: полная информация -->
+                    <p>{{ anime.get_season_display }} {{ anime.year }}</p>
+                    <p>{{ anime.total_episodes|default:"-" }} серий</p>
+                    <div class="anime-genres">{{ anime.genres }}</div>
+                    <div class="anime-description">{{ anime.description }}</div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% if top_list.has_next %}
+    <button id="load-more" data-page="{{ top_list.next_page_number }}">Показать ещё</button>
+{% endif %}
+</div>
+</body>
+</html>

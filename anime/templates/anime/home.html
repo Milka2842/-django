@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+{% extends "base.html" %}
+{% load proxy_filters %}
+{% load static %}
+
+{% block title %}Смотреть аниме онлайн бесплатно | Yamu.su{% endblock %}
+
+{% block extra_head %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <meta name="yandex-verification" content="ac40d9a27a8ad4e9" />
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    </noscript>
+    <meta name="description" content="Смотрите аниме онлайн в HD качестве с русской озвучкой. Большая коллекция новинок и классики аниме. Бесплатно и без регистрации.">
+{% endblock %}
+
+{% block content %}
+<body>
+    <h1 class="hidden">Лучший сайт для просмотра аниме онлайн</h1>
+    <!-- Секция новинок -->
+    <div class="section-header">
+        <h2 class="section-title">Новинки</h2>
+    </div>
+
+    <div class="carousel-container">
+        <div class="carousel-nav carousel-prev">❮</div>
+        <div class="carousel-wrapper">
+            <div class="carousel">
+            {% for anime in trending_anime %}
+            <div class="carousel-item">
+                <a href="{% url 'anime:anime_detail' pk=anime.pk slug=anime.slug|default:'temp-slug' %}">
+                    {% if anime.poster_kodik %}
+                        <img
+                          src="{{ anime.poster_kodik }}"
+                          alt="Постер аниме {{ anime.title }}"
+                          class="carousel-poster"
+                          width="300"
+                          height="450"
+                          loading="{% if forloop.counter <= 4 %}eager{% else %}lazy{% endif %}"
+                          decoding="async"
+                        >
+                    {% else %}
+                        <div class="no-poster">Нет постера</div>
+                    {% endif %}
+                        <div class="carousel-info">
+                            <div class="carousel-title">
+                                {{ anime.title }}
+                                <span class="carousel-rating">★ {{ anime.shikimori_rating|default:"-" }}</span>
+                            </div>
+                            <div class="carousel-meta">
+                                <div class="carousel-season">
+                                    {{ anime.get_season_display }} {{ anime.year }}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="carousel-nav carousel-next">❯</div>
+    </div>
+
+    <!-- Секции по жанрам -->
+    {% for section in genre_sections %}
+    <div class="genre-header">
+        <a href="{% url 'anime:top' %}?genres={{ section.genre }}" class="genre-link">
+            <h2 class="genre-title">{{ section.genre }}</h2>
+            <svg width="24" height="24" fill="#3b82f6" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+        </a>
+    </div>
+
+    <div class="carousel-container">
+        <div class="carousel-nav carousel-prev">❮</div>
+        <div class="carousel-wrapper">
+            <div class="carousel">
+                {% for anime in section.anime_list %}
+                <div class="carousel-item">
+                    <a href="{% url 'anime:anime_detail' pk=anime.pk slug=anime.slug|default:'temp-slug' %}">
+                        {% if anime.poster_kodik %}
+                            <img
+                              src="{{ anime.poster_kodik }}"
+                              alt="Постер аниме {{ anime.title }}"
+                              class="carousel-poster"
+                              width="300"
+                              height="450"
+                              loading="lazy"
+                              decoding="async"
+                            >
+                        {% else %}
+                            <div class="no-poster">Нет постера</div>
+                        {% endif %}
+                        <div class="carousel-info">
+                            <div class="carousel-title">
+                                {{ anime.title }}
+                                <span class="carousel-rating">★ {{ anime.shikimori_rating|default:"-" }}</span>
+                            </div>
+                            <div class="carousel-meta">
+                                <div class="carousel-season">
+                                    {{ anime.get_season_display }} {{ anime.year }}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="carousel-nav carousel-next">❯</div>
+    </div>
+    {% endfor %}
+</body>
+
+<script>
+    // Скрипт для навигации каруселей
+    document.querySelectorAll('.carousel-container').forEach(container => {
+        const carousel = container.querySelector('.carousel');
+        const prevBtn = container.querySelector('.carousel-prev');
+        const nextBtn = container.querySelector('.carousel-next');
+        const itemWidth = 280 + 25; // Ширина элемента + gap
+        const scrollAmount = itemWidth * 3; // Прокрутка по 3 элемента
+
+        prevBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+
+        nextBtn.addEventListener('click', () => {
+            carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+
+        // Скрываем кнопки, если прокрутка невозможна
+        const updateButtons = () => {
+            prevBtn.style.display = carousel.scrollLeft > 10 ? 'flex' : 'none';
+            nextBtn.style.display = carousel.scrollLeft < carousel.scrollWidth - carousel.clientWidth - 10
+                ? 'flex' : 'none';
+        };
+
+        carousel.addEventListener('scroll', updateButtons);
+        updateButtons();
+
+        // Установка начального положения карусели
+        carousel.scrollLeft = 50;
+    });
+</script>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,43 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: humanize\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-10 15:47+0300\n"
+"PO-Revision-Date: 2024-03-10 15:47+0300\n"
+"Last-Translator: Your Name <your@email.com>\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "a minute ago"
+msgstr "минуту назад"
+
+msgid "{0} minutes ago"
+msgstr "{0} минут назад"
+
+msgid "an hour ago"
+msgstr "час назад"
+
+msgid "{0} hours ago"
+msgstr "{0} часов назад"
+
+msgid "a day ago"
+msgstr "вчера"
+
+msgid "{0} days ago"
+msgstr "{0} дней назад"
+
+msgid "a month ago"
+msgstr "месяц назад"
+
+msgid "{0} months ago"
+msgstr "{0} месяцев назад"
+
+msgid "a year ago"
+msgstr "год назад"
+
+msgid "{0} years ago"
+msgstr "{0} лет назад"

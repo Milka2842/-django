@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+{% extends "base.html" %}
+{% load static %}
+{% load webp %}
+{% block title %}
+    {% if anime.status == 'ongoing' %}
+        {{ anime.title }} {{ anime.total_episodes }} серия смотреть онлайн бесплатно в HD качестве
+    {% else %}
+        Смотреть {{ anime.title }} онлайн бесплатно в HD качестве с русской озвучке
+    {% endif %}
+{% endblock %}
+
+{% block extra_head %}
+    <style>
+      {% include "anime/critical-inline.html" %}
+    </style>
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}?v=1.5" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="{% static 'css/comment.css' %}?v=1.5" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="{% static 'css/detail.css' %}?v=1.5">
+        <link rel="stylesheet" href="{% static 'css/comment.css' %}?v=1.5">
+    </noscript>
+
+    <!-- Улучшенные hreflang теги -->
+    <link rel="alternate" hreflang="ru" href="https://yamu.su{% url 'anime:anime_detail' pk=anime.pk slug=anime.slug %}"/>
+    <link rel="alternate" hreflang="en" href="https://yamu.su{% url 'anime:anime_detail_en' pk=anime.pk slug_en=anime.slug_en %}"/>
+    <link rel="alternate" hreflang="x-default" href="https://yamu.su{% url 'anime:anime_detail' pk=anime.pk slug=anime.slug %}"/>
+
+    <meta property="og:image" content="{{ anime.poster_kodik }}">
+    <meta property="og:url" content="{{ canonical_url }}">
+    <meta property="og:type" content="video.tv_show">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <link rel="preload" href="{{ anime.poster_kodik|to_webp }}" as="image" type="image/webp">
+    <link rel="preload" href="{{ anime.poster_kodik }}" as="image">
+{% endblock %}
+
+{% block content %}
+<body>
+<div class="detail-container">
+    <noscript>
+        <div style="position: absolute; left: -9999px; top: -9999px;">
+            <h2>Доступные эпизоды:</h2>
+            {% for voice in anime.get_available_voiceovers %}
+                <!-- Используем явное обращение к voice.code -->
+                {% with voice_code=voice.0 %}
+
+                {% endwith %}
+            {% endfor %}
+        </div>
+    </noscript>
+        <div class="detail-block" id="anime-detail-block"
+             style="background-image: url('{% if screenshots %}{{ screenshots.0.url }}{% else %}{{ anime.poster_kodik|to_webp }}{% endif %}');">
+            <div class="anime-overlay"></div>
+            <div class="anime-header-content">
+                <div class="poster-container" style="position: relative; width: 300px; aspect-ratio: 2/3; background: #1a1a1a; border-radius: 8px; overflow: hidden;">
+                    <!-- Размытый мини-постер (LQIP) -->
+                    <img
+                        src="{{ anime.poster_kodik|to_webp_lqip }}"
+                        alt=""
+                        aria-hidden="true"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(20px); transform: scale(1.1);"
+                        loading="eager"
+                    >
+                    <!-- Основной постер -->
+                    <img
+                        src="{{ anime.poster_kodik }}"
+                        alt="{{ anime.title }}"
+                        class="anime-poster-detail"
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s ease;"
+                        loading="eager"
+                        fetchpriority="high"
+                        onload="this.style.opacity=1; this.previousElementSibling.style.display='none';"
+                        onerror="this.style.opacity=1;"
+                    >
+                </div>
+
+                <div class="anime-meta">
+                    <h1>{{ anime.title }}
+                        <!-- Блок статуса -->
+                        <span class="anime-status status-{{ anime.status }}">
+                            {{ anime.get_status_display }}
+                        </span>
+                    </h1>
+
+                    <div class="meta-row rating-row">
+                        <span class="meta-label">Рейтинг:</span>
+                        <span class="meta-value rating-value">
+                            {{ anime.shikimori_rating|default:"-" }} <span class="gold-star">★</span>
+                        </span>
+                    </div>
+
+                    <div class="meta-row">
+                        <span class="meta-label">Сезон:</span>
+                        <span class="meta-value">{{ anime.get_season_display }} {{ anime.year }}</span>
+                    </div>
+
+                    <div class="meta-row">
+                        <span class="meta-label">Серий:</span>
+                        <span class="meta-value">{{ anime.total_episodes }}</span>
+                    </div>
+
+                    <div class="meta-row">
+                        <span class="meta-label">Жанры:</span>
+                        <span class="meta-value">{{ anime.genres }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    {% if anime.description %}
+    <div class="detail-block" id="description-block">
+        <div class="description">
+            <h2>Описание</h2>
+            <div class="description-content description-content--collapsed" id="anime-description">
+                {{ anime.description|linebreaks }}
+            </div>
+            <span class="read-more-btn" id="read-more-btn">Читать дальше</span>
+        </div>
+    </div>
+    {% endif %}
+
+
+    <div class="detail-block" id="player-block">
+        <div class="block-content">
+            <div class="video-container">
+                <div id="kodik-player"></div>
+                <div class="skip-op-container">
+                    <button id="skip-op-button">Пропустить опенинг</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% if franchise_parts %}
+<div class="detail-block" id="franchise-block" style="margin: 5px 0 10px;">
+    <div class="block-content">
+        <div class="franchise-list">
+            <h2>Порядок просмотра франшизы</h2>
+            {% if franchise_parts|length <= 1 %}
+                <p class="franchise-notice">Похоже, у данного аниме нет продолжения или оно ещё не добавлено на сайт</p>
+            {% else %}
+                <div class="franchise-carousel">
+                    <button class="franchise-arrow left">‹</button>
+                    <div class="franchise-viewport">
+                        <div class="franchise-gradient-left"></div>
+                        <div class="franchise-gradient-right"></div>
+                        <div class="franchise-track">
+                            {% for part in franchise_parts %}
+                            <div class="franchise-item {% if part.id == anime.id %}active{% endif %}" data-id="{{ part.id }}">
+                                <div class="franchise-card">
+                                    <a href="{% url 'anime:anime_detail' pk=part.pk slug=part.slug|default:'temp-slug' %}">
+                                        <picture>
+                                            <source srcset="{{ part.poster_kodik|to_webp }}" type="image/webp">
+                                            <img src="{{ part.poster_kodik }}" alt="{{ part.title }}"
+                                                 class="franchise-poster" loading="lazy" fetchpriority="low" decoding="async">
+                                        </picture>
+                                        <div class="franchise-info">
+                                            <div class="franchise-title">{{ part.title }}</div>
+                                            <div class="franchise-rating">
+                                                <span class="star">★</span> {{ part.shikimori_rating|default:"-" }}
+                                            </div>
+                                            <div>{{ part.get_season_display }} {{ part.year }}</div>
+                                            <div>Серий: {{ part.total_episodes|default:"?" }}</div>
+                                            <div class="franchise-genres">{{ part.genres|truncatewords:4 }}</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button class="franchise-arrow right">›</button>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if similar_anime %}
+<div class="detail-block" id="similar-anime-block" style="margin: 5px 0 10px;">
+    <div class="block-content">
+        <div class="franchise-list">
+            <h2>Похожие аниме по жанрам</h2>
+            {% if similar_anime|length >= 1 %}
+                <div class="franchise-carousel">
+                    <button class="franchise-arrow left">‹</button>
+                    <div class="franchise-viewport">
+                        <div class="franchise-gradient-left"></div>
+                        <div class="franchise-gradient-right"></div>
+                        <div class="franchise-track">
+                            {% for similar in similar_anime %}
+                            <div class="franchise-item" data-id="{{ similar.id }}">
+                                <div class="franchise-card">
+                                    <a href="{% url 'anime:anime_detail' pk=similar.pk slug=similar.slug|default:'temp-slug' %}">
+                                        <picture>
+                                            <source srcset="{{ similar.poster_kodik|to_webp }}" type="image/webp">
+                                            <img src="{{ similar.poster_kodik }}" alt="{{ similar.title }}"
+                                                 class="franchise-poster" loading="lazy" fetchpriority="low" decoding="async">
+                                        </picture>
+                                        <div class="franchise-info">
+                                            <div class="franchise-title">{{ similar.title }}</div>
+                                            <div class="franchise-rating">
+                                                <span class="star">★</span> {{ similar.shikimori_rating|default:"-" }}
+                                            </div>
+                                            <div>{{ similar.get_season_display }} {{ similar.year }}</div>
+                                            <div>Серий: {{ similar.total_episodes|default:"?" }}</div>
+                                            <div class="franchise-genres">{{ similar.genres|truncatewords:4 }}</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <button class="franchise-arrow right">›</button>
+                </div>
+            {% else %}
+                <p class="franchise-notice">Не найдено похожих аниме по жанрам</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="detail-block" id="comments-block">
+    <div class="block-content">
+        <div class="comments-section" style="max-width: 1200px; margin: 40px auto; padding: 20px;">
+            <h2>Комментарии <span id="comments-count">{{ total_comments }}</span></h2>
+
+            {% if not user.is_authenticated %}
+                <p style="color: #b0b0b0; margin-top: 5px; margin-bottom: 15px;">
+                    <a href="{% url 'register' %}" style="color: #3b82f6; text-decoration: none;">Зарегистрируйтесь</a>, чтобы оставить комментарий
+                </p>
+            {% endif %}
+
+            {% if user.is_authenticated %}
+                <form method="post" class="mb-4">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea
+                            name="text"
+                            class="form-control"
+                            rows="3"
+                            placeholder="Ваш комментарий..."
+                            required
+                        ></textarea>
+                    </div>
+                    <input type="hidden" name="parent_id" id="parent_id" value="">
+                    <button type="submit" class="btn btn-primary mt-2">Отправить</button>
+                </form>
+            {% endif %}
+
+            <div class="comments-list" id="comments-container">
+                {% for comment in comments %}
+                    {% include 'anime/comment.html' %}
+                {% empty %}
+                    <p class="no-comments-message">Пока нет комментариев. Будьте первым!</p>
+                {% endfor %}
+            </div>
+
+            {% if comments.has_next %}
+            <div class="text-center mt-4">
+                <button id="load-more-btn" class="btn btn-primary"
+                        data-next-page="{{ comments.next_page_number }}"
+                        data-total-comments="{{ total_comments }}">
+                    Показать ещё
+                    <span class="remaining-count">({{ remaining }})</span>
+                </button>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/critical.js' %}" defer></script>
+<script src="{% static 'js/deferred.js' %}" defer></script>
+
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "TVSeries",
+          "url": "https://yamu.su{% url 'anime:anime_detail' pk=anime.pk slug=anime.slug %}",
+          "name": "{{ anime.title }}",
+          "image": "{{ anime.poster_kodik }}",
+          "description": "{{ anime.description|striptags|truncatechars:200 }}",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "{{ anime.shikimori_rating|default:8.0 }}",
+            "bestRating": "10",
+            "ratingCount": "{{ anime.shikimori_votes|default:1000 }}"
+          },
+          "numberOfEpisodes": "{{ anime.total_episodes }}",
+          "datePublished": "{{ anime.year }}-01-01",
+          "genre": "{{ anime.genres }}",
+          "inLanguage": "ru"
+        }
+    </script>
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Главная",
+              "item": "https://yamu.su/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "{{ anime.title }}"
+            }
+          ]
+        }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "VideoObject",
+      "name": "{{ anime.title }}",
+      "description": "Смотреть {{ anime.title }} онлайн",
+      "thumbnailUrl": "{{ anime.poster_kodik }}",
+      "contentUrl": "https://yamu.su{% url 'anime:anime_detail' pk=anime.pk slug=anime.slug %}"
+    }
+    </script>
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% for comment in comments %}
+    {% include 'anime/comment.html' %}
+{% endfor %}
+
+{% if comments.has_next %}
+<div class="text-center mt-4">
+    <button id="load-more-btn" class="btn btn-primary"
+            data-next-page="{{ comments.next_page_number }}"
+            data-total-comments="{{ total_comments }}">
+        Показать ещё
+        <span class="remaining-count">({{ remaining }}+)</span>
+    </button>
+</div>
+{% endif %}
+
+</body>
+</html>

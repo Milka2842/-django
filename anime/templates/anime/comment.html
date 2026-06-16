@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+{% load time_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="comment mb-3 p-3 border rounded"
+     style="margin-left: {% if comment.parent %}30px{% else %}0{% endif %};"
+     data-comment-id="{{ comment.id }}"
+     data-parent-id="{{ comment.parent_id|default:'' }}">
+    <div class="comment-header mb-2">
+        <strong>{{ comment.user.username }}</strong>
+        <small class="text-muted">{{ comment.created_at|natural_time }}</small>
+    </div>
+    <p class="mb-2">{{ comment.text }}</p>
+
+    <div class="comment-actions d-flex gap-2 align-items-center">
+        <button class="like-btn" data-comment-id="{{ comment.id }}" data-action="like">
+            <!-- Простая иконка лайка -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M1 21h4V9H1v12zm22-11c0-1.1-.9-2-2-2h-6.31l.95-4.57.03-.32c0-.41-.17-.79-.44-1.06L14.17 1 7.59 7.59C7.22 7.95 7 8.45 7 9v10c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.09-.23.14-.47.14-.73v-2z" fill="currentColor"/>
+            </svg>
+            <span class="count">{{ comment.likes.count }}</span>
+        </button>
+
+        <button class="dislike-btn" data-comment-id="{{ comment.id }}" data-action="dislike">
+            <!-- Простая иконка дизлайка -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 3H6c-.83 0-1.54.5-1.84 1.22l-3.02 7.05c-.09.23-.14.47-.14.73v2c0 1.1.9 2 2 2h6.31l-.95 4.57-.03.32c0 .41.17.79.44 1.06L9.83 23l6.58-6.59c.36-.36.58-.86.58-1.41V5c0-1.1-.9-2-2-2zm4 0v12h4V3h-4z" fill="currentColor"/>
+            </svg>
+            <span class="count">{{ comment.dislikes.count }}</span>
+        </button>
+        <button
+            class="btn btn-link text-decoration-none p-0 show-replies-btn"
+            data-comment-id="{{ comment.id }}"
+        >
+            Ответов {{ comment.replies.count }}
+        </button>
+    </div>
+
+<div class="replies ml-4 mt-2"
+     id="replies-{{ comment.id }}"
+     style="display: none;"
+     data-initial-state="hidden"> <!-- Добавлено -->
+    {% for reply in comment.replies.all %}
+        {% include 'anime/comment.html' with comment=reply %}
+    {% endfor %}
+</div>
+</div>
+</body>
+</html>

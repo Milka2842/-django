@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base.html' %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Личный кабинет</title>
+    <style>
+        .logout-btn {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="profile-container">
+    <h2 style="text-align: center;">Личный кабинет</h2>
+
+    <div class="user-info">
+        <div class="info-item">
+            <span class="info-label">Никнейм:</span>
+            <span class="info-value">{{ user.username }}</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Email:</span>
+            <span class="info-value">{{ user.email }}</span>
+        </div>
+        <div class="info-item">
+            <span class="info-label">Дата регистрации:</span>
+            <span class="info-value">{{ user.date_joined|date:"d.m.Y" }}</span>
+        </div>
+        {% if not user.email_verified %}
+            <div class="info-item" style="color: red;">
+                <span class="info-label">Статус:</span>
+                <span class="info-value">Email не подтвержден!</span>
+            </div>
+        {% endif %}
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="{% url 'logout' %}" class="logout-btn">Выйти из аккаунта</a>
+    </div>
+</div>
+</body>
+{% endblock %}
+</html>

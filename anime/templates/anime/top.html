@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Топ аниме по рейтингу | Смотреть лучшие аниме онлайн</title>
+    <meta name="description" content="Рейтинг топ аниме для просмотра онлайн бесплатно. Лучшие сериалы по оценкам зрителей с описанием и отзывами.">
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+{% extends "base.html" %}
+{% block content %}
+<div class="top-page-container">
+    <h1>Топ аниме</h1>
+
+    <!-- Кнопки переключения вида -->
+    <div class="view-controls">
+        <button class="view-btn active" data-view="1">Подробно</button>
+        <button class="view-btn" data-view="auto">Плитка</button>
+    </div>
+
+    <!-- Плавающие фильтры -->
+    <div class="floating-filters">
+        <button class="floating-filters-btn">Фильтры</button>
+        <div class="filters-panel">
+            <form id="filter-form">
+                <!-- Выбор жанров -->
+                <div class="genre-selector">
+                    <button type="button" class="genre-btn" onclick="toggleGenres()">Жанры ▼</button>
+                    <div class="genre-dropdown" id="genreDropdown">
+                        {% for genre in genres %}
+                            <div class="genre-item" data-genre="{{ genre }}">
+                                <span class="genre-name">{{ genre }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="selected-genres" id="selectedGenres">
+                        {% for genre in selected_genres|slice:":3" %}
+                            <span class="selected-genre">
+                                {{ genre }}
+                                <span class="remove-genre" data-genre="{{ genre }}">×</span>
+                            </span>
+                        {% endfor %}
+                        {% if selected_genres|length > 3 %}
+                            <span class="selected-genres-more">...</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Фильтр по году -->
+                <div class="year-range">
+                    <label>Год выпуска:</label>
+                    <div class="year-inputs">
+                        <input type="number" name="year_min" placeholder="От"
+                               value="{{ request.GET.year_min }}" min="1900" max="{{ current_year }}">
+                        <input type="number" name="year_max" placeholder="До"
+                               value="{{ request.GET.year_max }}" min="1900" max="{{ current_year }}">
+                    </div>
+                </div>
+
+                <!-- Сортировка -->
+                <div class="sort-selector">
+                    <label>Сортировка:</label>
+                    <select name="sort">
+                        <option value="-shikimori_rating" {% if request.GET.sort == "-shikimori_rating" %}selected{% endif %}>
+                            Рейтинг ↓
+                        </option>
+                        <option value="shikimori_rating" {% if request.GET.sort == "shikimori_rating" %}selected{% endif %}>
+                            Рейтинг ↑
+                        </option>
+                        <option value="-year" {% if request.GET.sort == "-year" %}selected{% endif %}>
+                            Год ↓
+                        </option>
+                        <option value="year" {% if request.GET.sort == "year" %}selected{% endif %}>
+                            Год ↑
+                        </option>
+                    </select>
+                </div>
+
+                <div class="filter-buttons">
+                    <button type="button" id="reset-filters">Сбросить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="anime-list-container" class="view-1">
+        {% include "anime/top_anime_list.html" %}
+    </div>
+</div>
+
+<script>
+    // Сохраняем позицию скролла перед обновлением
+    let scrollPosition = 0;
+    let isDropdownOpen = false;
+    const genreContainer = document.getElementById('genreDropdown');
+
+    function saveScrollState() {
+        if (genreContainer) {
+            scrollPosition = genreContainer.scrollTop;
+            isDropdownOpen = genreContainer.classList.contains('show');
+        }
+    }
+
+    function restoreScrollState() {
+        if (genreContainer) {
+            genreContainer.scrollTop = scrollPosition;
+            if (isDropdownOpen) {
+                genreContainer.classList.add('show');
+            }
+        }
+    }
+
+    function toggleGenres() {
+        const dropdown = document.getElementById('genreDropdown');
+        dropdown.classList.toggle('show');
+    }
+
+    // Закрытие дропдауна при клике вне
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.genre-selector')) {
+            document.getElementById('genreDropdown').classList.remove('show');
+        }
+    });
+
+    // Обработка выбора жанров
+    document.querySelectorAll('.genre-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const genre = this.dataset.genre;
+            const url = new URL(window.location.href);
+            const params = new URLSearchParams(url.search);
+            const genres = params.getAll('genres');
+
+            if (genres.includes(genre)) {
+                // Удаляем если уже есть
+                const newParams = new URLSearchParams();
+                params.forEach((value, key) => {
+                    if (!(key === 'genres' && value === genre)) {
+                        newParams.append(key, value);
+                    }
+                });
+                url.search = newParams.toString();
+            } else {
+                params.append('genres', genre);
+                url.search = params.toString();
+            }
+
+            saveScrollState();
+            window.location.href = url.toString();
+        });
+    });
+
+    // Удаление жанра через крестик
+    document.querySelectorAll('.remove-genre').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const genre = this.dataset.genre;
+            const url = new URL(window.location.href);
+            const params = new URLSearchParams(url.search);
+            const newParams = new URLSearchParams();
+
+            params.forEach((value, key) => {
+                if (!(key === 'genres' && value === genre)) {
+                    newParams.append(key, value);
+                }
+            });
+
+            url.search = newParams.toString();
+            window.location.href = url.toString();
+        });
+    });
+
+    // Применение фильтров года и сортировки
+    const filterForm = document.getElementById('filter-form');
+    filterForm.querySelectorAll('input, select').forEach(element => {
+        element.addEventListener('change', () => {
+            const formData = new FormData(filterForm);
+            const url = new URL(window.location.href);
+            const params = new URLSearchParams(url.search);
+
+            // Сохраняем только жанры из текущих параметров
+            const currentGenres = params.getAll('genres');
+            params.delete('year_min');
+            params.delete('year_max');
+            params.delete('sort');
+            params.delete('page');
+
+            formData.forEach((value, key) => {
+                if (value) params.set(key, value);
+            });
+
+            url.search = params.toString();
+            window.location.href = url.toString();
+        });
+    });
+
+    // Сброс фильтров
+    document.getElementById('reset-filters').addEventListener('click', () => {
+        window.location.href = window.location.pathname;
+    });
+
+    // Управление видом (Подробно/Плитка)
+    const container = document.getElementById('anime-list-container');
+    document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const view = this.dataset.view;
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            container.className = 'view-' + view;
+            localStorage.setItem('topViewMode', view);
+        });
+    });
+
+    // Восстановление режима вида из localStorage
+    const savedView = localStorage.getItem('topViewMode');
+    if (savedView) {
+        const btn = document.querySelector(`.view-btn[data-view="${savedView}"]`);
+        if (btn) btn.click();
+    }
+
+    // Мобильная панель фильтров
+    document.querySelector('.floating-filters-btn').addEventListener('click', () => {
+        document.querySelector('.filters-panel').classList.toggle('active');
+    });
+
+    // Восстанавливаем состояние дропдауна после перезагрузки (если нужно)
+    document.addEventListener('DOMContentLoaded', restoreScrollState);
+</script>
+
+<style>
+    /* Базовые стили для топа */
+    .top-page-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .view-controls {
+        margin-bottom: 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .view-btn {
+        padding: 8px 16px;
+        background: #1f2937;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .view-btn.active {
+        background: #3b82f6;
+    }
+
+    /* Стили фильтров */
+    .floating-filters {
+        position: sticky;
+        top: 80px;
+        z-index: 100;
+        margin-bottom: 20px;
+    }
+
+    .filters-panel {
+        background: #1f2937;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        margin-top: 10px;
+    }
+
+    .genre-selector {
+        position: relative;
+        margin-bottom: 15px;
+    }
+
+    .genre-dropdown {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 300px;
+        max-height: 400px;
+        overflow-y: auto;
+        background: #111827;
+        border: 1px solid #374151;
+        border-radius: 8px;
+        z-index: 1000;
+        padding: 10px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 5px;
+    }
+
+    .genre-dropdown.show {
+        display: grid;
+    }
+
+    .genre-item {
+        padding: 6px 10px;
+        cursor: pointer;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+
+    .genre-item:hover {
+        background: #374151;
+    }
+
+    .selected-genres {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 10px;
+    }
+
+    .selected-genre {
+        background: #3b82f6;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.85em;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .remove-genre {
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .year-range, .sort-selector {
+        margin-bottom: 15px;
+    }
+
+    .year-inputs {
+        display: flex;
+        gap: 10px;
+        margin-top: 5px;
+    }
+
+    .year-inputs input {
+        width: 80px;
+        background: #111827;
+        border: 1px solid #374151;
+        color: white;
+        padding: 5px;
+        border-radius: 4px;
+    }
+
+    select {
+        background: #111827;
+        color: white;
+        border: 1px solid #374151;
+        padding: 5px;
+        border-radius: 4px;
+        width: 100%;
+    }
+
+    /* Адаптивность для плитки */
+    .view-auto #anime-list-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+        .filters-panel {
+            display: none;
+        }
+        .filters-panel.active {
+            display: block;
+        }
+    }
+</style>
+{% endblock %}
+</body>
+</html>

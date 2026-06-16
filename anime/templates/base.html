@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="ru">
+{% load static %}
+<head>
+    <meta name="yandex-verification" content="ac40d9a27a8ad4e9" />
+    <meta charset="UTF-8">
+    <link rel="canonical" href="https://yamu.su{% block canonical_url %}{{ request.path }}{% endblock %}">
+    <link rel="icon" href="{% static 'img/logo.png' %}" type="image/png">
+    <link rel="apple-touch-icon" href="{% static 'img/logo.png' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests; block-all-mixed-content">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="alternate" hreflang="ru" href="https://yamu.su" />
+    <link rel="alternate" hreflang="x-default" href="https://yamu.su" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfMZhrib2Bg-4.woff2" as="font" type="font/woff2" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=1.5">
+
+    <meta name="logo" content="https://yamu.su/static/img/logo.png">
+
+    {% block meta_description %}
+        <meta name="description" content="
+            {% if anime.status == 'ongoing' %}
+                {{ anime.title }} {{ anime.total_episodes }} серия смотреть онлайн в HD качестве , в русской озвучке .
+            {% else %}
+                {{ anime.title }} смотреть онлайн в HD качестве в русской озвучке.
+            {% endif %}
+            Возможность пропускать опенинг.
+            {% if franchise_parts %}Порядок просмотра франшизы.{% endif %}
+            Похожие аниме на {{ anime.title }}.
+            {% if anime.genres %}Аниме жанра {{ anime.genres }}.{% endif %}
+            В плеере кодик ,все серии доступны
+        ">
+    {% endblock %}
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="hamburger" id="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+        <a href="{% url 'anime:home' %}" class="logo-container">
+            <img src="{% static 'img/logo.png' %}" alt="Yume" class="logo-img">
+            <div class="logo-text">Yamu</div>
+        </a>
+
+        <div class="nav-links">
+            <a href="{% url 'anime:home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Главная</a>
+            <a href="{% url 'anime:top' %}" class="{% if request.resolver_match.url_name == 'top' %}active{% endif %}">Топ</a>
+        </div>
+
+        <div class="search-container">
+            <input type="text"
+                   class="search-input"
+                   placeholder="Поиск аниме..."
+                   id="search-input">
+            <div class="search-results" id="search-results"></div>
+            <div class="search-toggle" id="search-toggle">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z" fill="#b0b0b0"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="account-icon">
+            <a href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14Z" fill="#b0b0b0"/>
+                </svg>
+            </a>
+        </div>
+    </nav>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="{% url 'anime:home' %}">Главная</a>
+        <a href="{% url 'anime:top' %}">Топ</a>
+    </div>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        // Анимация поиска
+        const searchToggle = document.getElementById('search-toggle');
+        const searchInput = document.getElementById('search-input');
+        const searchResults = document.getElementById('search-results');
+
+        searchToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            searchInput.classList.toggle('active');
+            if (searchInput.classList.contains('active')) {
+                searchInput.focus();
+            } else {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        // Мобильное меню
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            mobileMenu.style.display = mobileMenu.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Поиск
+        document.addEventListener('DOMContentLoaded', function() {
+            let timeoutId;
+            const searchInput = document.getElementById('search-input');
+            const searchResults = document.getElementById('search-results');
+
+            searchInput.addEventListener('input', function(e) {
+                clearTimeout(timeoutId);
+                const query = e.target.value.trim();
+
+                if (!query) {
+                    searchResults.style.display = 'none';
+                    return;
+                }
+
+                // Увеличиваем задержку для коротких запросов
+                const delay = query.length < 5 ? 400 : 200;
+
+                timeoutId = setTimeout(() => {
+                    fetch(`{% url 'anime:anime_search_api' %}?q=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            searchResults.innerHTML = '';
+                            if (data.results?.length > 0) {
+                                data.results.forEach(anime => {
+                                    const item = document.createElement('a');
+                                    item.href = anime.url;
+                                    item.className = 'search-result-item';
+
+                                    const img = document.createElement('img');
+                                    img.className = 'search-result-poster';
+                                    img.src = anime.poster;
+                                    img.onerror = function() {
+                                        this.src = '{% static 'images/no-poster.png' %}';
+                                    };
+
+                                    const title = document.createElement('div');
+                                    title.className = 'search-result-title';
+                                    title.textContent = anime.title;
+
+                                    item.append(img, title);
+                                    searchResults.appendChild(item);
+                                });
+                                searchResults.style.display = 'block';
+                            }
+                        });
+                }, delay);
+            });
+
+            // Скрытие результатов при клике вне поиска
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-container')) {
+                    searchResults.style.display = 'none';
+                }
+
+                if (!e.target.closest('.navbar') && mobileMenu.style.display === 'flex') {
+                    mobileMenu.style.display = 'none';
+                    hamburger.classList.remove('active');
+                }
+            });
+        });
+        // Проверка поддержки WebP
+        function checkWebPSupport(callback) {
+            var webP = new Image();
+            webP.onload = webP.onerror = function() {
+                callback(webP.height === 2);
+            };
+            webP.src = 'data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACyAgCdASoCAAIALmk0mk0iIiIiIgBoSygABc6WWgAA/veff/0PP8bA//LwYAAA';
+        }
+
+        // Сохраняем результат в localStorage
+        checkWebPSupport(function(isSupported) {
+            localStorage.setItem('webpSupported', isSupported);
+            document.documentElement.classList.toggle('webp', isSupported);
+            document.documentElement.classList.toggle('no-webp', !isSupported);
+        });
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Yamu.su",
+      "url": "https://yamu.su/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://yamu.su/search/?q={search_term_string}"
+        },
+        "query-input": {
+          "@type": "PropertyValueSpecification",
+          "valueRequired": "http://schema.org/True",
+          "valueName": "search_term_string"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "Yamu",
+          "logo": "https://yamu.su/static/img/logo.png"
+        }
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Yamu",
+      "url": "https://yamu.su",
+      "logo": "https://yamu.su/static/img/logo.png",
+      "image": "https://yamu.su/static/img/logo.png",
+      "description": "Смотрите аниме онлайн в HD качестве с русской озвучкой",
+      "sameAs": []
+    }
+    </script>
+    </script>
+</body>
+</html>

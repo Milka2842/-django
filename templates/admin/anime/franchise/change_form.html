@@ -1,0 +1,146 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+<style>
+    .sortable-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 20px 0;
+    }
+    .sortable-item {
+        width: 150px;
+        cursor: grab;
+        user-select: none;
+        border: 2px solid transparent;
+        border-radius: 8px;
+        padding: 5px;
+        background: transparent;  /* прозрачный фон */
+        transition: opacity 0.2s;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .sortable-item.dragging {
+        opacity: 0.5;
+        cursor: grabbing;
+    }
+    .sortable-item:hover {
+        border-color: #79aec8;
+    }
+    .sortable-item img {
+        width: 100%;
+        border-radius: 4px;
+        pointer-events: none;
+    }
+    .sortable-item .info {
+        text-align: center;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+    .sortable-item .id-badge {
+        background: #417690;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 10px;
+        font-size: 10px;
+        display: inline-block;
+        margin-top: 3px;
+    }
+</style>
+{% endblock %}
+
+{% block field_sets %}
+{{ block.super }}
+
+<!-- Ручное редактирование ID (теперь сверху) -->
+<div class="module aligned">
+    <h2>Редактирование ID вручную</h2>
+    {{ adminform.form.anime_ids_display }}
+    <div class="help">{{ adminform.form.anime_ids_display.help_text }}</div>
+</div>
+{% endblock %}
+
+{% block after_field_sets %}
+<!-- Блок перетаскиваемых постеров -->
+<div class="module aligned">
+    <h2>Порядок франшизы (перетащите постеры)</h2>
+    <div id="sortable-container" class="sortable-grid">
+        {% for anime in anime_objects %}
+        <div class="sortable-item" data-id="{{ anime.shikimori_id }}">
+            <img src="{{ anime.poster_kodik }}" alt="{{ anime.title }}" loading="lazy">
+            <div class="info">
+                <div><strong>{{ anime.title|truncatechars:20 }}</strong></div>
+                <div>{{ anime.year }} {{ anime.get_season_display|default:"?" }}</div>
+                <div>Эпизодов: {{ anime.total_episodes|default:"?" }}</div>
+                <div><span class="id-badge">#{{ anime.shikimori_id }}</span></div>
+            </div>
+        </div>
+        {% empty %}
+        <p>Нет аниме в этой франшизе. Добавьте ID в поле выше.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+    (function() {
+        const container = document.getElementById('sortable-container');
+        const textarea = document.getElementById('id_anime_ids_display');
+        if (!container || !textarea) return;
+
+        // Функция обновления textarea из порядка постеров
+        function updateTextarea() {
+            const items = container.querySelectorAll('.sortable-item');
+            const ids = Array.from(items).map(item => item.dataset.id);
+            textarea.value = ids.join('\n');
+        }
+
+        // Функция обновления порядка постеров из textarea (если все ID присутствуют)
+        function updatePostersFromTextarea() {
+            const newIds = textarea.value
+                .split(/[,\n]/)
+                .map(id => id.trim())
+                .filter(id => id.length > 0);
+
+            if (newIds.length === 0) return;
+
+            // Получаем текущие элементы как Map (ID -> DOM-элемент)
+            const currentItems = new Map();
+            container.querySelectorAll('.sortable-item').forEach(item => {
+                currentItems.set(item.dataset.id, item);
+            });
+
+            // Проверяем, что все новые ID существуют среди текущих
+            const allExist = newIds.every(id => currentItems.has(id));
+            if (!allExist) return; // если какой-то ID новый или удалён — не переставляем
+
+            // Переставляем элементы в новом порядке
+            const fragment = document.createDocumentFragment();
+            newIds.forEach(id => {
+                fragment.appendChild(currentItems.get(id));
+            });
+            container.appendChild(fragment); // append перемещает существующие узлы
+        }
+
+        // Инициализация: устанавливаем textarea из начального порядка (на случай, если оно было пустым)
+        updateTextarea();
+
+        // Инициализируем Sortable для перетаскивания
+        if (container.children.length > 1) {
+            new Sortable(container, {
+                animation: 150,
+                ghostClass: 'dragging',
+                onEnd: updateTextarea
+            });
+        }
+
+        // Слушаем изменения в textarea (ввод вручную)
+        textarea.addEventListener('input', updatePostersFromTextarea);
+        // Также можно добавить событие 'change' для потери фокуса
+        textarea.addEventListener('change', updatePostersFromTextarea);
+
+        // Если пользователь вставит многострочный текст, тоже сработает
+    })();
+</script>
+{% endblock %}

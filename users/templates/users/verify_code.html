@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+{% extends 'base.html' %}
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Подтверждение регистрации</title>
+</head>
+<body>
+    <div class="registration-container">
+        <h2 style="text-align: center;">Подтверждение регистрации</h2>
+
+        {% if error %}
+            <div class="error-message">{{ error }}</div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-field">
+                <input type="text" name="code" placeholder="Введите 6-значный код из письма" required>
+            </div>
+            <button type="submit" style="width: 100%; padding: 10px;">Подтвердить</button>
+        </form>
+
+        <p style="text-align: center; margin-top: 15px;">
+            Код отправлен на вашу электронную почту.<br>
+            Если вы не получили письмо, проверьте папку "Спам".
+        </p>
+    </div>
+{% endblock %}
+</body>
+</html>
