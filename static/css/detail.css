@@ -1,0 +1,1581 @@
+.detail-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.detail-block {
+    background: #1a1a1a;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#anime-detail-block {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 20px;
+    margin-bottom: 25px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 300px;
+}
+
+.anime-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.6) 50%, rgba(0, 0, 0, 0.4) 100%);
+    z-index: 0;
+}
+
+.anime-header-content {
+    display: flex;
+    position: relative;
+    z-index: 1;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.anime-poster-detail {
+    max-width: 300px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.anime-meta {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+    color: #b0b0b0;
+    position: relative;
+    z-index: 1;
+    gap: 25px;
+    font-size: 16px;
+}
+
+.anime-meta h1 {
+    color: var(--text-accent);
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+}
+
+.anime-meta p {
+    color: var(--text-primary);
+    font-size: 1.1rem;
+    margin: 12px 0;
+}
+
+.anime-meta-item.genres {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.anime-meta-item.genres .label {
+    flex: 0 0 auto;
+    margin-right: 8px;
+}
+
+.anime-meta-item.genres .value {
+    flex: 1 1 100%;
+}
+
+.anime-status {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.status-released {
+    background-color: #28a745;
+}
+
+.status-ongoing {
+    background-color: #007bff;
+}
+
+.status-anons {
+    background-color: #dc3545;
+}
+
+.meta-row {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.meta-label {
+    color: var(--text-secondary);
+    min-width: 80px;
+    display: inline-block;
+}
+
+.meta-value {
+    color: var(--text-primary);
+    flex-grow: 1;
+}
+
+#description-block {
+    position: relative;
+    overflow: hidden;
+    background: #1a1a1a;
+    padding: 0;
+    border-radius: 12px;
+}
+
+#description-block::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(to right, rgba(18, 18, 18, 0.8) 0%, rgba(18, 18, 18, 0.4) 50%, transparent 100%), url('/static/img/goky.jpg') no-repeat right 35%;
+    background-size: cover;
+    z-index: 0;
+    border-radius: 12px;
+}
+
+.description-content {
+    position: relative;
+    line-height: 1.5em;
+    font-size: 1.05rem;
+    color: #e0e0e0;
+    text-align: left;
+}
+
+.truncated-text {
+    display: inline;
+    mask-image: linear-gradient(to right, black 0%, black calc(100% - 5ch), transparent calc(100% - 1ch));
+    -webkit-mask-image: linear-gradient(to right, black 0%, black calc(100% - 5ch), transparent calc(100% - 1ch));
+}
+
+.read-more-inline {
+    display: inline !important;
+    color: #3b82f6 !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    margin-left: 2px !important;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    font: inherit !important;
+    text-decoration: none !important;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+}
+
+.read-more-inline:hover {
+    text-decoration: underline !important;
+}
+
+.read-more-btn {
+    display: inline-block;
+    background: none;
+    border: none;
+    color: #3b82f6;
+    cursor: pointer;
+    margin-top: 8px;
+    font-size: 14px;
+    padding: 0;
+    text-decoration: none;
+}
+
+.description-content--collapsed ~ .read-more-btn {
+    display: none !important;
+}
+
+.description-content--expanded ~ .read-more-btn {
+    display: inline-block !important;
+}
+
+.description-content--collapsed {
+    max-height: none;
+    overflow: visible;
+}
+
+.description-content--collapsed::after {
+    display: none;
+}
+
+#description-block .description {
+    position: relative;
+    z-index: 2;
+    padding: 20px 30px;
+    color: #e0e0e0;
+    margin: 0;
+}
+
+.description {
+    max-width: 1200px;
+    margin: 20px auto;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+}
+
+.description h2 {
+    color: var(--text-accent);
+    margin: 0 0 15px 0;
+    padding: 0;
+    line-height: 1.3;
+}
+
+#anime-description {
+    margin: 0;
+    padding: 0;
+    line-height: 1.7;
+    text-align: left;
+}
+
+#anime-description p {
+    margin: 0 0 1em 0;
+    padding: 0;
+}
+
+#anime-description p:last-child {
+    margin-bottom: 0;
+}
+
+.video-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    aspect-ratio: 16/9;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+#kodik-player {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.skip-op-container {
+    position: absolute;
+    bottom: 30px;
+    right: 20px;
+    z-index: 9999;
+}
+
+#skip-op-button {
+    padding: 10px 20px;
+    background: #e53935;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: none;
+    font-size: 14px;
+    transition: opacity 0.3s;
+}
+
+.franchise-list {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.franchise-list h2 {
+    color: var(--text-accent);
+    margin-top: 0;
+}
+
+.franchise-notice {
+    color: var(--text-secondary);
+    text-align: center;
+    margin-top: 15px;
+    font-style: italic;
+}
+
+.franchise-carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 5px 0;
+    overflow: visible !important;
+    background: #1a1a1a !important;
+    padding: 0 730px;
+}
+
+.franchise-carousel::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 730px !important;
+    height: calc(100% + 20px) !important;
+    background: linear-gradient(to right,
+        #1a1a1a 0%,
+        #1a1a1a 250px,
+        rgba(26, 26, 26, 0.8) 370px,
+        rgba(26, 26, 26, 0.4) 550px,
+        transparent 730px
+    ) !important;
+    z-index: 1005 !important;
+    pointer-events: none !important;
+    display: block !important;
+}
+
+.franchise-carousel::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    width: 730px !important;
+    height: calc(100% + 20px) !important;
+    background: linear-gradient(to left,
+        #1a1a1a 0%,
+        #1a1a1a 250px,
+        rgba(26, 26, 26, 0.8) 370px,
+        rgba(26, 26, 26, 0.4) 550px,
+        transparent 730px
+    ) !important;
+    z-index: 1005 !important;
+    pointer-events: none !important;
+    display: block !important;
+}
+
+.franchise-carousel:has(.franchise-item:only-child) {
+    padding: 0 !important;
+}
+
+.franchise-carousel:has(.franchise-item:only-child)::before,
+.franchise-carousel:has(.franchise-item:only-child)::after {
+    display: none !important;
+}
+
+.franchise-carousel:has(.franchise-item:only-child) .franchise-arrow {
+    display: none !important;
+}
+
+.franchise-carousel:has(.franchise-item:only-child) .franchise-viewport {
+    width: 100% !important;
+}
+
+.franchise-carousel:has(.franchise-item:only-child) .franchise-item {
+    position: relative !important;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    scale: 1 !important;
+}
+
+.franchise-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(30, 30, 30, 0.8);
+    border: none;
+    color: white;
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.franchise-viewport {
+    position: relative;
+    width: 90%;
+    height: 340px;
+    overflow: visible !important;
+    background: transparent !important;
+    z-index: 1000;
+}
+
+.franchise-track {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    background: transparent !important;
+    overflow: visible !important;
+}
+
+.franchise-item {
+    position: absolute;
+    width: 200px;
+    height: 300px;
+    transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1), filter 0.6s ease, opacity 0.6s ease, scale 0.6s ease;
+    transform-origin: center center;
+    z-index: 1;
+    border-radius: 8px;
+    overflow: visible !important;
+    background: transparent !important;
+    filter: none !important;
+    box-shadow: none !important;
+}
+
+.franchise-item:hover {
+    z-index: 1000 !important;
+}
+
+.franchise-item.active {
+    position: relative;
+    z-index: 3;
+    transform: translateX(0) scale(1);
+    filter: none;
+    opacity: 1;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.franchise-item.left-1 {
+    transform: translateX(-120%);
+    filter: brightness(0.8) blur(1px);
+    opacity: 0.9;
+    scale: 0.95;
+    z-index: 2;
+}
+
+.franchise-item.right-1 {
+    transform: translateX(120%);
+    filter: brightness(0.8) blur(1px);
+    opacity: 0.9;
+    scale: 0.95;
+    z-index: 2;
+}
+
+.franchise-item.left-2 {
+    transform: translateX(-240%);
+    filter: brightness(0.6) blur(2px);
+    opacity: 0.7;
+    scale: 0.9;
+    z-index: 1;
+}
+
+.franchise-item.right-2 {
+    transform: translateX(240%);
+    filter: brightness(0.6) blur(2px);
+    opacity: 0.7;
+    scale: 0.9;
+    z-index: 1;
+}
+
+.franchise-item.hidden-left,
+.franchise-item.left-3 {
+    transform: translateX(-360%);
+    filter: brightness(0.4) blur(3px);
+    opacity: 0.5;
+    scale: 0.85;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.franchise-item.hidden-right,
+.franchise-item.right-3 {
+    transform: translateX(360%);
+    filter: brightness(0.4) blur(3px);
+    opacity: 0.5;
+    scale: 0.85;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.franchise-item.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(0) scale(0);
+    filter: brightness(0) blur(5px);
+    z-index: 0;
+}
+
+.franchise-card {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    border-radius: 8px;
+    overflow: visible !important;
+    box-shadow: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    flex-shrink: 0;
+    background: transparent !important;
+    border: none !important;
+}
+
+.franchise-item .franchise-card:hover,
+.franchise-card:hover {
+    transform: translateY(-15px) !important;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5) !important;
+    z-index: 1001 !important;
+}
+
+.franchise-poster {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.franchise-info {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.franchise-card:hover .franchise-info {
+    opacity: 1;
+}
+
+.franchise-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: var(--text-accent);
+}
+
+.franchise-rating {
+    color: #FFD700;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.franchise-genres {
+    font-size: 0.85rem;
+    margin-top: 8px;
+    line-height: 1.3;
+}
+
+.description-text {
+    max-height: 7.5em;
+    overflow: hidden;
+    position: relative;
+    transition: max-height 0.3s ease;
+}
+
+.franchise-gradient-left,
+.franchise-gradient-right {
+    display: none !important;
+}
+
+#franchise-block,
+#similar-anime-block {
+    overflow: hidden !important;
+    padding: 0 !important;
+    min-height: 400px;
+}
+
+.franchise-item.left-1,
+.franchise-item.right-1,
+.franchise-item.left-2,
+.franchise-item.right-2,
+.franchise-item.hidden-left,
+.franchise-item.hidden-right,
+.franchise-item.left-3,
+.franchise-item.right-3,
+.franchise-item.hidden {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.franchise-carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 5px 0;
+    overflow: visible !important;
+    background: #1a1a1a !important;
+    /* Уменьшаем padding до ширины одного постера + небольшой отступ */
+    padding: 0 220px;
+}
+
+.franchise-carousel::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    /* Уменьшаем ширину градиента */
+    width: 220px !important;
+    height: calc(100% + 20px) !important;
+    /* Делаем сначала сплошной цвет, потом градиент */
+    background: linear-gradient(to right,
+        #1a1a1a 0%,
+        #1a1a1a 120px, /* Сплошной цвет на ширину постера (200px) с запасом */
+        rgba(26, 26, 26, 0.9) 140px,
+        rgba(26, 26, 26, 0.7) 160px,
+        rgba(26, 26, 26, 0.4) 190px,
+        transparent 220px
+    ) !important;
+    z-index: 1005 !important;
+    pointer-events: none !important;
+    display: block !important;
+}
+
+.franchise-carousel::after {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important;
+    /* Уменьшаем ширину градиента */
+    width: 220px !important;
+    height: calc(100% + 20px) !important;
+    /* Делаем сначала сплошной цвет, потом градиент */
+    background: linear-gradient(to left,
+        #1a1a1a 0%,
+        #1a1a1a 120px, /* Сплошной цвет на ширину постера (200px) с запасом */
+        rgba(26, 26, 26, 0.9) 140px,
+        rgba(26, 26, 26, 0.7) 160px,
+        rgba(26, 26, 26, 0.4) 190px,
+        transparent 220px
+    ) !important;
+    z-index: 1005 !important;
+    pointer-events: none !important;
+    display: block !important;
+}
+
+.franchise-track {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    background: transparent !important;
+    overflow: visible !important;
+    /* Центрируем трек */
+    margin: 0 auto;
+    position: relative;
+}
+
+#franchise-block,
+#similar-anime-block {
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 5px 0 !important; /* Уменьшили отступы */
+    min-height: 380px; /* Немного уменьшили высоту */
+}
+
+.franchise-list {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 5px 0 !important; /* Уменьшили padding */
+    text-align: center;
+}
+
+/* Делаем кнопки поверх градиентов */
+.franchise-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(30, 30, 30, 0.8);
+    border: none;
+    color: white;
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 1010 !important; /* Увеличили z-index */
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.franchise-arrow.left {
+    left: 10px;
+}
+
+.franchise-arrow.right {
+    right: 10px;
+}
+
+/* Золотой цвет для числа рейтинга */
+.meta-value {
+    color: var(--text-primary);
+    flex-grow: 1;
+}
+
+/* Делаем число рейтинга золотым */
+.meta-row .meta-value {
+    color: #FFD700; /* Золотой цвет для всего значения */
+}
+
+/* Если нужно оставить другие значения обычным цветом, можно уточнить селектор */
+.meta-row:first-child .meta-value {
+    color: #FFD700; /* Только для рейтинга */
+}
+
+/* Альтернативный вариант - если нужно только число сделать золотым */
+.meta-value span[style*="color: gold"] {
+    color: #FFD700 !important;
+}
+
+/* Более точный селектор для рейтинга */
+.meta-row:first-child .meta-value {
+    color: #FFD700;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+#franchise-block,
+#similar-anime-block {
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 2px 0 !important; /* Уменьшили отступы сверху и снизу */
+    min-height: 350px; /* Немного уменьшили высоту */
+}
+
+.franchise-list {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2px 0 !important; /* Уменьшили padding */
+    text-align: center;
+}
+
+.franchise-list h2 {
+    color: var(--text-accent);
+    margin-top: 0;
+    margin-bottom: 8px !important; /* Уменьшили отступ снизу */
+}
+
+.franchise-item.left-1 {
+    transform: translateX(-120%);
+    filter: brightness(0.8) blur(1px);
+    opacity: 0.9;
+    scale: 0.95;
+    z-index: 2;
+}
+
+.franchise-item.right-1 {
+    transform: translateX(120%);
+    filter: brightness(0.8) blur(1px);
+    opacity: 0.9;
+    scale: 0.95;
+    z-index: 2;
+}
+
+.franchise-item.left-2 {
+    transform: translateX(-240%); /* 120% × 2 = 240% */
+    filter: brightness(0.6) blur(2px);
+    opacity: 0.7;
+    scale: 0.9;
+    z-index: 1;
+}
+
+.franchise-item.right-2 {
+    transform: translateX(240%); /* 120% × 2 = 240% */
+    filter: brightness(0.6) blur(2px);
+    opacity: 0.7;
+    scale: 0.9;
+    z-index: 1;
+}
+
+.franchise-item.hidden-left,
+.franchise-item.left-3 {
+    transform: translateX(-360%); /* 120% × 3 = 360% */
+    filter: brightness(0.4) blur(3px);
+    opacity: 0.5;
+    scale: 0.85;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.franchise-item.hidden-right,
+.franchise-item.right-3 {
+    transform: translateX(360%); /* 120% × 3 = 360% */
+    filter: brightness(0.4) blur(3px);
+    opacity: 0.5;
+    scale: 0.85;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.franchise-item.active {
+    transform: translateX(0) scale(1);
+    z-index: 3;
+}
+
+.franchise-item.left-1 {
+    transform: translateX(-210px) scale(0.95);
+    filter: brightness(0.8) blur(1px);
+    opacity: 0.9;
+    z-index: 2;
+}
+
+.franchise-item.right-1 {
+    transform: translateX(210px) scale(0.95);
+    filter: brightness(0.8) blur(1px);
+    opacity: 0.9;
+    z-index: 2;
+}
+
+.franchise-item.left-2 {
+    transform: translateX(-420px) scale(0.9);
+    filter: brightness(0.6) blur(2px);
+    opacity: 0.7;
+    z-index: 1;
+}
+
+.franchise-item.right-2 {
+    transform: translateX(420px) scale(0.9);
+    filter: brightness(0.6) blur(2px);
+    opacity: 0.7;
+    z-index: 1;
+}
+
+.franchise-item.hidden-left,
+.franchise-item.left-3 {
+    transform: translateX(-630px) scale(0.85);
+    filter: brightness(0.4) blur(3px);
+    opacity: 0.5;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.franchise-item.hidden-right,
+.franchise-item.right-3 {
+    transform: translateX(630px) scale(0.85);
+    filter: brightness(0.4) blur(3px);
+    opacity: 0.5;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ОБНОВЛЯЕМ PADDING ДЛЯ КАРУСЕЛИ */
+.franchise-carousel {
+    padding: 0 420px; /* Соответствует самому дальнему смещению + отступ */
+}
+
+.meta-row .meta-value {
+    color: var(--text-primary); /* Возвращаем обычный цвет */
+}
+
+.meta-row:first-child .meta-value {
+    color: var(--text-primary); /* Отменяем золотой цвет для всех первых элементов */
+}
+
+/* ДОБАВЛЯЕМ специфичный селектор только для рейтинга */
+.anime-meta .meta-row:first-child .meta-value {
+    color: #FFD700; /* Золотой цвет ТОЛЬКО для рейтинга */
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.rating-row .rating-value {
+    color: #FFD700 !important;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.gold-star {
+    color: #FFD700 !important;
+}
+
+.franchise-list h2 {
+    color: var(--text-accent);
+    margin-top: 0;
+    margin-bottom: 0 !important; /* Убрали 8px */
+}
+
+#franchise-block,
+#similar-anime-block {
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 2px 0 !important;
+    min-height: 342px; /* Уменьшили с 350px на 8px */
+}
+
+.video-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto; /* Убрали 20px */
+    aspect-ratio: 16/9;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.franchise-track {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+    background: transparent !important;
+    overflow: visible !important;
+    margin: 0 auto;
+    position: relative;
+    gap: 5px; /* Добавили межпостерный интервал 5px */
+}
+
+.detail-block:has(.video-container) {
+    padding: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+#franchise-block,
+#similar-anime-block {
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 2px 0 !important;
+    min-height: 330px; /* Уменьшили с 350px на 20px */
+}
+
+.franchise-viewport {
+    position: relative;
+    width: 90%;
+    height: 320px; /* Уменьшили с 340px на 20px */
+    overflow: visible !important;
+    background: transparent !important;
+    z-index: 1000;
+}
+
+#franchise-block:has(.franchise-notice),
+#similar-anime-block:has(.franchise-notice) {
+    min-height: 80px !important;
+    height: 80px !important;
+    padding: 5px 0 !important;
+    margin: 2px 0 !important;
+}
+
+.franchise-notice {
+    margin-top: 4px !important;
+}
+
+@media (max-width: 768px) {
+    .meta-row {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        margin-bottom: 1px !important;
+        line-height: 1.1;
+        flex: 1;
+        min-height: 0;
+        gap: 0;
+    }
+
+    #franchise-block,
+    #similar-anime-block {
+        min-height: 115px; /* Уменьшили с 130px на 15px */
+    }
+
+    .franchise-viewport {
+        height: calc(100% + 10px) !important;
+    }
+
+    .anime-status {
+        font-size: 6px !important;
+        padding: 1px 2px !important;
+        margin-left: 3px;
+        vertical-align: baseline;
+    }
+
+    .anime-meta h1 {
+        color: var(--text-accent);
+        margin: 0 0 3px 0 !important;
+        font-size: 0.8rem !important;
+        line-height: 1;
+        flex: 0 0 auto;
+    }
+
+    .anime-meta {
+        flex: 1;
+        min-width: 0 !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+        height: auto !important;
+        gap: 0 !important;
+        font-size: 8px !important;
+    }
+
+    .anime-poster-detail {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover;
+        border-radius: 6px;
+        max-width: none !important;
+        max-height: none !important;
+        margin: 0 !important;
+    }
+
+    .anime-header-content {
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+        margin: 0 !important;
+        font-size: 1.2rem;
+        line-height: 1.2;
+        align-items: flex-start;
+        min-height: 120px;
+        height: 120px;
+    }
+
+    .poster-container {
+        flex: 0 0 auto !important;
+        height: 100% !important;
+        display: flex;
+        align-items: stretch;
+        width: auto !important;
+        aspect-ratio: 2/3;
+        margin: 0 !important;
+    }
+
+    #anime-detail-block {
+        padding: 8px;
+        min-height: 120px !important;
+    }
+
+    .detail-block {
+        padding: 5px !important;
+        margin: 2px 0 !important;
+    }
+
+    .detail-container {
+        padding: 3px !important;
+        margin: 2px 0 !important;
+        font-size: 9px !important;
+    }
+
+    .meta-label {
+        min-width: 40px;
+        font-size: 7px !important;
+        margin-right: 1px;
+    }
+
+    .meta-value {
+        font-size: 7px !important;
+        line-height: 1;
+    }
+
+    .meta-row .meta-value span[style*="color: gold"] {
+        font-size: 1.2em !important;
+        display: inline-block;
+        transform: none;
+    }
+
+    .anime-meta-item.genres {
+        align-items: flex-start !important;
+    }
+
+    .anime-meta-item.genres .value {
+        align-self: flex-start !important;
+        line-height: 1.1 !important;
+    }
+
+    .video-container {
+        margin: 3px 0 !important;
+        aspect-ratio: 16/9 !important;
+    }
+
+    #description-block::before {
+        width: 100%;
+        background-position: center;
+    }
+
+    #description-block .description {
+        padding: 5px;
+    }
+
+    .description h2 {
+        font-size: 0.85rem !important;
+        margin-bottom: 8px;
+    }
+
+    .description-content {
+        font-size: 0.6rem !important;
+        line-height: 1.1 !important;
+    }
+
+    .read-more-btn {
+        font-size: 0.65rem !important;
+        padding: 2px 6px !important;
+        margin-top: 4px !important;
+    }
+
+    .read-more-inline {
+        font-size: 0.7rem !important;
+    }
+
+    #anime-description,
+    #anime-description p {
+        font-size: 0.6rem !important;
+        line-height: 1.1 !important;
+    }
+
+    #description-block * {
+        font-size: 0.6rem !important;
+    }
+
+    .comments-section {
+        padding: 5px !important;
+        margin: 10px auto !important;
+    }
+
+    .comments-section h2 {
+        font-size: 0.85rem !important;
+    }
+
+    #franchise-block,
+    #similar-anime-block {
+        overflow: hidden !important;
+        padding: 0 !important;
+        margin: 2px 0 !important;
+        min-height: 130px;
+    }
+
+    .franchise-list {
+        padding: 2px 0 !important;
+    }
+
+    .franchise-list h2 {
+        margin-top: 2px !important;
+        margin-bottom: 5px !important;
+        font-size: 0.85rem !important;
+        padding: 0 5px !important;
+    }
+
+    .franchise-carousel {
+        position: relative;
+        overflow: visible !important;
+        background: #1a1a1a !important;
+        padding: 0 180px;
+        z-index: 1000;
+    }
+
+    .franchise-carousel::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 180px !important;
+        height: calc(100% + 10px) !important;
+        background: linear-gradient(to right,
+            #1a1a1a 0%,
+            #1a1a1a 60px,
+            rgba(26, 26, 26, 0.8) 90px,
+            rgba(26, 26, 26, 0.4) 135px,
+            transparent 180px
+        ) !important;
+        z-index: 1005 !important;
+        pointer-events: none !important;
+        display: block !important;
+    }
+
+    .franchise-carousel::after {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        width: 180px !important;
+        height: calc(100% + 10px) !important;
+        background: linear-gradient(to left,
+            #1a1a1a 0%,
+            #1a1a1a 60px,
+            rgba(26, 26, 26, 0.8) 90px,
+            rgba(26, 26, 26, 0.4) 135px,
+            transparent 180px
+        ) !important;
+        z-index: 1005 !important;
+        pointer-events: none !important;
+        display: block !important;
+    }
+
+    .franchise-viewport {
+        height: calc(100% + 10px) !important;
+        overflow: visible !important;
+        background: transparent !important;
+        position: relative;
+        z-index: 1000;
+    }
+
+    .franchise-track {
+        transform: translateY(-20px);
+        height: calc(100% + 10px) !important;
+        align-items: flex-start;
+        padding-top: 20px;
+        background: transparent !important;
+    }
+
+    .franchise-item {
+        width: 65px !important;
+        height: 100px !important;
+    }
+
+    .franchise-item:hover {
+        z-index: 1000 !important;
+    }
+
+    .franchise-item.active {
+        z-index: 1008 !important;
+    }
+
+    .franchise-item.left-1,
+    .franchise-item.right-1 {
+        z-index: 1007 !important;
+    }
+
+    .franchise-item.left-2,
+    .franchise-item.right-2 {
+        z-index: 1006 !important;
+    }
+
+    .franchise-card {
+        width: 65px !important;
+        height: 100px !important;
+    }
+
+    .franchise-item .franchise-card:hover,
+    .franchise-card:hover {
+        transform: translateY(-5px) !important;
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.5) !important;
+        z-index: 1010 !important;
+    }
+
+    .franchise-info {
+        padding: 2px !important;
+        font-size: 0.5rem !important;
+        border-radius: 6px !important;
+    }
+
+    .franchise-title {
+        font-size: 0.55rem !important;
+        margin-bottom: 1px !important;
+    }
+
+    .franchise-rating {
+        font-size: 0.5rem !important;
+        margin-bottom: 1px !important;
+    }
+
+    .franchise-genres {
+        font-size: 0.45rem !important;
+    }
+
+    .franchise-poster {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .franchise-arrow {
+        z-index: 1015 !important;
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+        background: #007bff !important;
+        border: 1px solid #0056b3 !important;
+    }
+
+    .franchise-arrow:hover {
+        background: #0056b3 !important;
+    }
+
+    .franchise-arrow.left {
+        left: 10px !important;
+    }
+
+    .franchise-arrow.right {
+        right: 10px !important;
+    }
+
+    #skip-op-button {
+        padding: 2px 4px;
+        font-size: 8px;
+    }
+
+    .franchise-gradient-left,
+    .franchise-gradient-right,
+    .franchise-viewport::before,
+    .franchise-viewport::after {
+        display: none !important;
+    }
+
+    .franchise-notice {
+        font-size: 0.6rem !important;
+        margin-top: 8px !important;
+        padding: 0 10px !important;
+    }
+
+    /* Уменьшаем шрифт информации при наведении на постер */
+    .franchise-info {
+        font-size: 0.45rem !important;
+        padding: 3px !important;
+    }
+
+    .franchise-title {
+        font-size: 0.5rem !important;
+        margin-bottom: 2px !important;
+    }
+
+    .franchise-rating {
+        font-size: 0.45rem !important;
+        margin-bottom: 1px !important;
+    }
+
+    .franchise-genres {
+        font-size: 0.4rem !important;
+        margin-top: 2px !important;
+    }
+
+    .franchise-carousel {
+        position: relative;
+        overflow: visible !important;
+        background: #1a1a1a !important;
+        /* Уменьшаем padding до ширины мобильного постера + отступ */
+        padding: 0 75px;
+        z-index: 1000;
+    }
+
+    .franchise-carousel::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        /* Уменьшаем ширину градиента */
+        width: 75px !important;
+        height: calc(100% + 10px) !important;
+        background: linear-gradient(to right,
+            #1a1a1a 0%,
+            #1a1a1a 45px, /* Сплошной цвет на ширину мобильного постера (65px) */
+            rgba(26, 26, 26, 0.8) 50px,
+            rgba(26, 26, 26, 0.4) 60px,
+            transparent 75px
+        ) !important;
+        z-index: 1005 !important;
+        pointer-events: none !important;
+        display: block !important;
+    }
+
+    .franchise-carousel::after {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        /* Уменьшаем ширину градиента */
+        width: 75px !important;
+        height: calc(100% + 10px) !important;
+        background: linear-gradient(to left,
+            #1a1a1a 0%,
+            #1a1a1a 45px, /* Сплошной цвет на ширину мобильного постера (65px) */
+            rgba(26, 26, 26, 0.8) 50px,
+            rgba(26, 26, 26, 0.4) 60px,
+            transparent 75px
+        ) !important;
+        z-index: 1005 !important;
+        pointer-events: none !important;
+        display: block !important;
+    }
+
+    .franchise-info div:not(.franchise-title):not(.franchise-rating):not(.franchise-genres) {
+        font-size: 0.4rem !important;
+        margin-bottom: 1px !important;
+    }
+
+    /* Сдвигаем постеры вверх на 3px */
+    .franchise-track {
+        transform: translateY(-23px); /* было -20px, стало -23px */
+        height: calc(100% + 10px) !important;
+        align-items: flex-start;
+        padding-top: 20px;
+        background: transparent !important;
+    }
+
+    /* Уменьшаем ширину сплошного цвета в градиентах */
+    .franchise-carousel::before {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 75px !important;
+        height: calc(100% + 10px) !important;
+        background: linear-gradient(to right,
+            #1a1a1a 0%,
+            #1a1a1a 40px, /* Уменьшили с 45px до 40px */
+            rgba(26, 26, 26, 0.8) 50px,
+            rgba(26, 26, 26, 0.4) 60px,
+            transparent 75px
+        ) !important;
+        z-index: 1005 !important;
+        pointer-events: none !important;
+        display: block !important;
+    }
+
+    .franchise-carousel::after {
+        content: '' !important;
+        position: absolute !important;
+        top: 0 !important;
+        right: 0 !important;
+        width: 75px !important;
+        height: calc(100% + 10px) !important;
+        background: linear-gradient(to left,
+            #1a1a1a 0%,
+            #1a1a1a 40px, /* Уменьшили с 45px до 40px */
+            rgba(26, 26, 26, 0.8) 50px,
+            rgba(26, 26, 26, 0.4) 60px,
+            transparent 75px
+        ) !important;
+        z-index: 1005 !important;
+        pointer-events: none !important;
+        display: block !important;
+    }
+
+    #franchise-block,
+    #similar-anime-block {
+        margin: 2px 0 !important;
+        min-height: 130px;
+    }
+
+    /* Уменьшаем padding у списка франшизы */
+    .franchise-list {
+        padding: 2px 0 !important;
+    }
+
+    /* Увеличиваем z-index кнопок в мобильной версии */
+    .franchise-arrow {
+        z-index: 1020 !important;
+        width: 25px;
+        height: 25px;
+        font-size: 14px;
+        background: #007bff !important;
+        border: 1px solid #0056b3 !important;
+    }
+
+    /* Позиционирование кнопок в мобильной версии */
+    .franchise-arrow.left {
+        left: 5px !important;
+    }
+
+    .franchise-arrow.right {
+        right: 5px !important;
+    }
+
+    /* Золотой цвет для рейтинга в мобильной версии */
+    .meta-row:first-child .meta-value {
+        color: #FFD700;
+        font-size: 7px !important;
+    }
+
+    .franchise-track {
+        transform: translateY(-17px); /* было -20px, стало -17px (опускаем на 3px) */
+        height: calc(100% + 10px) !important;
+        align-items: flex-start;
+        padding-top: 20px;
+        background: transparent !important;
+    }
+
+    .franchise-item.active {
+        transform: translateX(0) scale(1);
+    }
+
+    .franchise-item.left-1 {
+        transform: translateX(-68px) scale(0.95);
+        filter: brightness(0.8) blur(1px);
+        opacity: 0.9;
+        z-index: 2;
+    }
+
+    .franchise-item.right-1 {
+        transform: translateX(68px) scale(0.95);
+        filter: brightness(0.8) blur(1px);
+        opacity: 0.9;
+        z-index: 2;
+    }
+
+    .franchise-item.left-2 {
+        transform: translateX(-136px) scale(0.9);
+        filter: brightness(0.6) blur(2px);
+        opacity: 0.7;
+        z-index: 1;
+    }
+
+    .franchise-item.right-2 {
+        transform: translateX(136px) scale(0.9);
+        filter: brightness(0.6) blur(2px);
+        opacity: 0.7;
+        z-index: 1;
+    }
+
+    .franchise-item.hidden-left,
+    .franchise-item.left-3 {
+        transform: translateX(-204px) scale(0.85);
+        filter: brightness(0.4) blur(3px);
+        opacity: 0.5;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    .franchise-item.hidden-right,
+    .franchise-item.right-3 {
+        transform: translateX(204px) scale(0.85);
+        filter: brightness(0.4) blur(3px);
+        opacity: 0.5;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+    #franchise-block:has(.franchise-notice),
+    #similar-anime-block:has(.franchise-notice) {
+        min-height: 50px !important;
+        height: 50px !important;
+        padding: 2px 0 !important;
+    }
+
+    .franchise-notice {
+        margin-top: 2px !important;
+    }
+}
+
+#franchise-block,
+#similar-anime-block,
+#comments-block {
+  content-visibility: auto;
+  contain-intrinsic-size: 500px; /* примерная высота, подбери точнее */
+}
+

@@ -1,0 +1,1889 @@
+:root {
+    --text-primary: #e0e0e0;       /* Белый для заголовков */
+    --text-secondary: #b0b0b0;    /* Серый для основного текста */
+    --text-accent: #ffffff;        /* Ярко-белый для акцентов */
+}
+.password-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    background: url('{% static "img/eye-open.svg" %}') no-repeat center;
+    background-size: contain;
+}
+.toggle-password.show {
+    background: url('{% static "img/eye-closed.svg" %}') no-repeat center;
+    background-size: contain;
+}
+
+/* Стили для активной кнопки */
+button:enabled {
+    background-color: #3b82f6; /* Основной синий цвет сайта */
+    color: white;
+    cursor: pointer;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+}
+
+/* Темные поля */
+input {
+    background-color: #2d2d2d;
+    color: #ffffff;
+    border: 1px solid #444;
+    border-radius: 4px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+    .verification-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-field {
+        margin-bottom: 15px;
+    }
+    .form-field input {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+    }
+
+
+    .profile-container {
+        max-width: 500px;
+        margin: 30px auto;
+        padding: 25px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    .user-info {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 6px;
+        margin-bottom: 20px;
+    }
+    .info-item {
+        margin-bottom: 10px;
+        padding: 8px 0;
+        border-bottom: 1px solid #eee;
+    }
+    .info-label {
+        font-weight: bold;
+        display: inline-block;
+        width: 100px;
+    }
+    .info-value {
+        color: #555;
+    }
+    .logout-btn {
+        display: inline-block;
+        background: #e74c3c;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+    }
+    .logout-btn:hover {
+        background-color: #c0392b;
+    }
+    .form-field {
+        margin-bottom: 15px;
+    }
+
+input:focus {
+    border-color: #3b82f6;
+    outline: none;
+}
+
+/* Основной текст */
+body,
+p,
+input,
+select,
+textarea,
+button,
+.anime-title,
+.search-result-title,
+.mobile-menu a {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    color: var(--text-secondary);
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Заголовки */
+h1, h2, h3, h4, h5, h6,
+.anime-card .anime-title, /* Заголовки аниме-карточек */
+.nav-links a,             /* Навигация */
+.logo-text,               /* Логотип */
+.search-input,            /* Поле поиска */
+.search-result-title {    /* Результаты поиска */
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+
+
+
+/* Шапка с постером и информацией */
+.anime-header {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+/* Строка с информацией */
+
+/* Метка (Сезон, Серий и т.д.) */
+/* Значение (год, количество и т.д.) */
+
+@media (max-width: 768px) {
+    .anime-header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+}
+    /* Добавляем стили для фона шапки */
+.anime-header-overlay {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Усиленное затемнение */
+    z-index: -1; /* Перемещаем под контент */
+    border-radius: 8px;
+}
+
+
+/* Контент должен быть поверх фона */
+.anime-header{
+    position: relative;
+    z-index: 1; /* Над фоном и оверлеем */
+}
+
+/* Адаптация для мобильных */
+
+    .anime-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.0); /* Затемнение фона */
+        z-index: 0;
+    }
+
+
+
+
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .anime-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+}
+
+
+.franchise-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+
+
+
+        .custom-controls {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            z-index: 1;
+            display: flex;
+            gap: 10px;
+        }
+
+        .reply-btn {
+            padding: 2px 8px;
+            font-size: 0.8rem;
+        }
+
+        .custom-controls select {
+            background: rgba(0,0,0,0.7);
+            color: white;
+            border: 1px solid #444;
+            padding: 5px 10px;
+            border-radius: 4px;
+            height: 32px;
+        }
+        /* Стили для ответов */
+
+
+
+/* Стили для комментариев */
+
+
+.anime-poster {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  margin: 10px;
+}
+
+.anime-poster:hover {
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+.anime-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 25px;
+  padding: 20px;
+}
+
+.anime-card {
+  text-align: center;
+}
+
+.anime-title {
+  margin-top: 10px;
+  font-size: 1.1em;
+  color: #333;
+}
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            padding-top: 65px;
+            min-height: 100vh;
+        }
+
+        /* Стили для шапки */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #1a1a1a;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            height: 40px;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            margin-right: 30px;
+        }
+
+        .logo-img {
+            height: 32px;
+            margin-right: 10px;
+            filter: invert(100%);
+        }
+
+        .logo-text {
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            flex-grow: 1;
+        }
+
+        .nav-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 8px 0;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ffffff;
+        }
+
+        .search-container {
+            position: relative;
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        .search-input {
+            width: 0;
+            opacity: 0;
+            border: none;
+            border-radius: 20px;
+            transition: all 0.3s ease-in-out;
+            padding: 0 !important;
+            background: #2a2a2a;
+            color: white;
+            font-size: 14px;
+            height: 36px;
+        }
+
+        .search-input.active {
+            width: 200px;
+            padding: 8px 15px !important;
+            padding-left: 40px !important;
+            opacity: 1;
+        }
+
+        .search-results {
+            position: absolute;
+            top: 120%;
+            left: 0;
+            right: 0;
+            background: #1e1e1e;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+            display: none;
+            border: 1px solid #333;
+        }
+
+        .search-result-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #2d2d2d;
+            transition: background 0.2s;
+            color: #e0e0e0;
+            text-decoration: none;
+        }
+
+        .search-result-item:hover {
+            background: #252525;
+        }
+
+        .search-result-poster {
+            width: 50px;
+            height: 70px;
+            object-fit: cover;
+            margin-right: 15px;
+            border-radius: 4px;
+        }
+
+        .search-result-title {
+            font-weight: 500;
+            font-size: 14px;
+            flex-grow: 1;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            width: 20px;
+            height: 20px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .search-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            transition: background 0.3s;
+        }
+
+        .search-toggle:hover {
+            background: #2a2a2a;
+        }
+
+        .account-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .account-icon:hover {
+            background: #2a2a2a;
+        }
+
+        .account-icon svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Мобильное меню */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: space-around;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 2px;
+            width: 100%;
+            background-color: #b0b0b0;
+            border-radius: 1px;
+            transition: all 0.3s;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            right: 0;
+            background: #1a1a1a;
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 999;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+            border-top: 1px solid #2d2d2d;
+        }
+
+        .mobile-menu a {
+            color: #b0b0b0;
+            text-decoration: none;
+            padding: 10px 0;
+            font-size: 16px;
+            border-bottom: 1px solid #2d2d2d;
+        }
+
+        .mobile-menu a:hover {
+            color: #ffffff;
+        }
+
+        /* Адаптация */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .logo-text {
+                font-size: 19px;
+            }
+
+            .search-container {
+                margin-right: 10px;
+            }
+
+            .search-input.active {
+                width: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-text {
+                display: none;
+            }
+
+            .search-input.active {
+                width: 120px;
+            }
+        }
+
+
+.franchise-hint {
+    color: var(--text-secondary);
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.franchise-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    margin: 0 auto;
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.franchise-scroll-view {
+    overflow: hidden;
+    flex-grow: 1;
+    padding: 5px 0;
+    position: relative;
+    height: 340px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.franchise-grid {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.4s ease;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    padding-bottom: 20px; /* Дополнительное пространство для тени */
+}
+
+::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none !important;
+}
+
+/* Для Firefox */
+* {
+    scrollbar-width: none !important;
+}
+
+.franchise-scroll-btn {
+    background: rgba(30, 30, 30, 0.8);
+    border: none;
+    color: white;
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background 0.2s;
+}
+
+.franchise-scroll-btn:hover {
+    background: #3b82f6;
+}
+
+
+
+.franchise-scroll-view::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Стили для карусели франшизы */
+
+
+
+
+
+
+.franchise-arrow:hover {
+    background: #3b82f6;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.franchise-arrow.left {
+    left: 5px;
+}
+
+.franchise-arrow.right {
+    right: 5px;
+}
+
+.franchise-arrow.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+
+/* СТИЛИ ДЛЯ СТРАНИЦЫ ТОПА */
+.top-page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+}
+
+/* Плавающие фильтры */
+.floating-filters {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.floating-filters-btn {
+    padding: 12px 24px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-weight: 500;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s;
+}
+
+.floating-filters-btn:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+}
+
+.filters-panel {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    width: 320px;
+    max-height: 80vh;
+    overflow-y: auto;
+    background: #1a1a1a;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 1001;
+    border: 1px solid #2d2d2d;
+    margin-bottom: 15px;
+}
+
+/* Управление видом */
+.view-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.view-btn {
+    padding: 8px 16px;
+    background: #2d2d2d;
+    color: #b0b0b0;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.view-btn.active {
+    background: #3b82f6;
+    color: white;
+}
+
+/* Режимы отображения */
+.anime-list {
+    display: grid;
+    gap: 25px;
+}
+
+.anime-item {
+    background: #1e1e1e;
+    border-radius: 12px;
+    overflow: hidden;
+    padding: 20px;
+    display: flex;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.anime-poster-link {
+    flex: 0 0 250px;
+    display: block;
+    border-radius: 12px;
+    overflow: hidden;
+    align-self: flex-start;
+}
+
+.anime-poster {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+}
+
+.anime-content {
+    flex: 1;
+    padding: 20px;
+    background: #171717;
+    border-radius: 12px;
+    margin-left: 25px;
+    display: flex;
+    flex-direction: column;
+}
+
+.anime-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.anime-title {
+    font-size: 24px;
+    color: #ffffff;
+    margin: 0;
+    flex: 1;
+    padding-right: 20px;
+}
+
+.anime-rating {
+    font-size: 24px;
+    color: #FFD700;
+    white-space: nowrap;
+}
+
+/* Мета-информация без фона */
+
+.anime-genres {
+    font-size: 16px;
+    color: #b0b0b0;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.anime-description {
+    color: #b0b0b0;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+/* Режим Компактно (4 в ряд) */
+.view-4 .anime-list {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.view-4 .anime-item {
+    flex-direction: column;
+    padding: 15px;
+}
+
+.view-4 .anime-poster-link {
+    width: 100%;
+    flex: 0 0 auto;
+    margin-bottom: 15px;
+}
+
+.view-4 .anime-poster {
+    height: 300px;
+    object-fit: contain;
+    background: #2d2d2d;
+}
+
+.view-4 .anime-content {
+    margin-left: 0;
+    padding: 15px;
+    text-align: center;
+}
+
+.view-4 .anime-header {
+    flex-direction: column;
+    align-items: center;
+}
+
+.view-4 .anime-title {
+    font-size: 18px;
+    margin-bottom: 5px;
+    text-align: center;
+    padding-right: 0;
+}
+
+.view-4 .anime-rating {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+/* В компактном режиме показываем жанры и сезон */
+.view-4 .anime-meta.full,
+.view-4 .anime-episodes,
+.view-4 .anime-description {
+    display: none;
+}
+
+.view-4 .anime-meta.compact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.view-4 .anime-genres {
+    display: none;
+}
+
+/* Режим Плитка (авто) */
+.view-auto .anime-list {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.view-auto .anime-item {
+    flex-direction: column;
+    padding: 10px;
+    align-items: center;
+    text-align: center;
+}
+
+.view-auto .anime-poster-link {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.view-auto .anime-poster {
+    height: 250px;
+    object-fit: contain;
+    background: #2d2d2d;
+    border-radius: 8px;
+}
+
+.view-auto .anime-content {
+    margin-left: 0;
+    padding: 0;
+    text-align: center;
+    background: transparent;
+}
+
+.view-auto .anime-header {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.view-auto .anime-title {
+    font-size: 16px;
+    margin-bottom: 5px;
+    padding-right: 0;
+}
+
+.view-auto .anime-rating {
+    font-size: 16px;
+    margin-bottom: 5px;
+}
+
+.view-auto .anime-details,
+.view-auto .anime-meta,
+.view-auto .anime-genres,
+.view-auto .anime-description {
+    display: none;
+}
+
+/* Общие стили для карточек */
+.no-poster {
+    width: 100%;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6a6a6a;
+    border-radius: 12px;
+    background: #2d2d2d;
+}
+
+/* Стили для фильтров */
+.genre-selector {
+    margin-bottom: 20px;
+}
+
+.genre-btn {
+    padding: 8px 15px;
+    background: #2d2d2d;
+    color: #b0b0b0;
+    border: 1px solid #3b82f6;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: left;
+    position: relative;
+}
+
+.genre-btn:after {
+    content: '▼';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+}
+
+.genre-dropdown {
+    display: none;
+    background: #1e1e1e;
+    border: 1px solid #3b82f6;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.genre-dropdown.show {
+    display: block;
+}
+
+.genre-item {
+    padding: 8px 12px;
+    background: #2d2d2d;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.genre-item:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.genre-item.selected {
+    background: #3b82f6;
+    color: white;
+}
+
+.selected-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.selected-genre {
+    background: #3b82f6;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.remove-genre {
+    cursor: pointer;
+    margin-left: 5px;
+    font-weight: bold;
+}
+
+.selected-genres-more {
+    background: #3b82f6;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.year-range {
+    margin-bottom: 20px;
+}
+
+.year-range label {
+    display: block;
+    margin-bottom: 8px;
+    color: #b0b0b0;
+}
+
+.year-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+.year-inputs input {
+    flex: 1;
+    padding: 8px 12px;
+    background: #2d2d2d;
+    color: white;
+    border: 1px solid #3b82f6;
+    border-radius: 6px;
+}
+
+.sort-selector {
+    margin-bottom: 20px;
+}
+
+.sort-selector label {
+    display: block;
+    margin-bottom: 8px;
+    color: #b0b0b0;
+}
+
+.sort-selector select {
+    width: 100%;
+    padding: 8px 12px;
+    background: #2d2d2d;
+    color: white;
+    border: 1px solid #3b82f6;
+    border-radius: 6px;
+}
+
+.filter-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-buttons button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+#reset-filters {
+    background: #2d2d2d;
+    color: #b0b0b0;
+    border: 1px solid #3b82f6;
+}
+
+#reset-filters:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .view-4 .anime-list {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .view-4 .anime-list {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+
+    .filters-panel {
+        width: 280px;
+    }
+}
+
+@media (max-width: 600px) {
+    .view-1 .anime-item {
+        flex-direction: column;
+    }
+
+    .view-1 .anime-poster-link {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .view-1 .anime-content {
+        margin-left: 0;
+    }
+
+    .view-auto .anime-list,
+    .view-4 .anime-list {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+
+    .filters-panel {
+        width: 260px;
+        padding: 15px;
+    }
+
+    .view-auto .anime-poster {
+        height: 200px;
+    }
+}
+
+.view-1 .anime-meta.full .anime-season,
+.view-1 .anime-meta.full .anime-episodes {
+    display: none;
+}
+
+/* Убираем фон у количества серий и сезона */
+.view-1 .anime-meta.full,
+.view-4 .anime-meta.compact {
+    background: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Закругляем углы постеров */
+.anime-poster-link,
+.anime-poster,
+.no-poster {
+    border-radius: 8px !important;
+}
+
+/* Жёлтый рейтинг со звездочкой */
+.anime-rating {
+    color: #FFD700 !important;
+}
+
+/* Добавляем жанры в компактном режиме */
+.view-4 .anime-genres {
+    display: block !important;
+    color: #b0b0b0;
+    font-size: 14px;
+    margin-bottom: 5px;
+    height: 40px;
+    overflow: hidden;
+}
+
+/* Убираем светлые линии в режимах компактно и плитка */
+.view-4 .anime-poster,
+.view-auto .anime-poster {
+    border: none;
+    background-color: #1e1e1e;
+}
+
+/* Убираем разделитель в компактном режиме */
+.view-4 .anime-meta.compact .anime-season:before {
+    content: "";
+    margin: 0;
+}
+
+/* Тёмный фон для пустых областей */
+.no-poster {
+    background-color: #1e1e1e !important;
+    border: none;
+}
+
+/* Выравнивание в компактном режиме */
+.view-4 .anime-item {
+    text-align: center;
+}
+
+.view-4 .anime-header {
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* Закругляем углы у постеров */
+.anime-poster,
+.anime-poster-link,
+.no-poster {
+    border-radius: 8px !important;
+}
+
+/* Рейтинг как часть названия */
+.anime-title .anime-rating {
+    color: #FFD700;
+    display: inline;
+    font-weight: normal;
+}
+
+/* Стили для компактного режима */
+.view-4 .anime-genres {
+    display: block !important;
+    color: #b0b0b0;
+    font-size: 14px;
+    margin-bottom: 5px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.view-4 .anime-meta.compact {
+    display: none; /* Скрываем дублирующий блок */
+}
+
+/* Убираем светлые линии в компактном и плиточном режимах */
+.view-4 .anime-poster,
+.view-auto .anime-poster {
+    border: none;
+    background-color: #1e1e1e;
+}
+
+/* Темный фон для пустых областей */
+.no-poster {
+    background-color: #1e1e1e !important;
+    border: none;
+}
+
+/* Выравнивание в компактном режиме */
+.view-4 .anime-item {
+    text-align: center;
+}
+
+.view-4 .anime-header {
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Для плиточного режима */
+.view-auto .anime-title .anime-rating {
+    display: inline;
+}
+
+.anime-poster-link,
+.anime-poster,
+.no-poster {
+    border-radius: 12px !important;
+    overflow: hidden;
+}
+
+/* Рейтинг как часть названия */
+.anime-title .anime-rating {
+    color: #FFD700;
+    display: inline;
+    font-weight: normal;
+    margin-left: 8px;
+}
+
+/* Убираем все ограничения по высоте и обрезке текста */
+.anime-genres,
+.anime-description {
+    height: auto !important;
+    overflow: visible !important;
+    white-space: normal !important;
+    text-overflow: clip !important;
+}
+
+/* Убираем фон у мета-информации */
+
+/* Для компактного режима */
+.view-4 .anime-genres {
+    display: block !important;
+    color: #b0b0b0;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+/* Убираем светлые линии */
+.view-4 .anime-poster,
+.view-auto .anime-poster {
+    border: none;
+    background-color: #1e1e1e;
+}
+
+/* Темный фон для пустых областей */
+.no-poster {
+    background-color: #1e1e1e !important;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6a6a6a;
+    font-size: 14px;
+}
+
+/* Выравнивание в компактном режиме */
+.view-4 .anime-item {
+    text-align: center;
+}
+
+.view-4 .anime-header {
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Для плиточного режима */
+.view-auto .anime-title .anime-rating {
+    display: inline;
+}
+
+/* Разделитель между сезоном и количеством серий */
+.anime-episodes {
+    margin-left: 8px;
+}
+
+/* Управление видимостью мета-информации */
+.view-1 .anime-meta.compact {
+    display: none;
+}
+.view-4 .anime-meta.full {
+    display: none;
+}
+.view-4 .anime-meta.compact {
+    display: block;
+}
+
+/* Убираем лишние отступы для мета-информации */
+
+/* Исправляем шрифт для сезона и эпизодов */
+.anime-season,
+.anime-episodes {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 0.9rem !important;
+    color: #b0b0b0 !important;
+}
+
+/* Убираем ненужные отступы в режиме 1 */
+.view-1 .anime-details > .anime-meta {
+    margin-bottom: 0 !important;
+}
+
+/* Исправления для постеров */
+.anime-poster-link {
+    overflow: hidden;
+    border-radius: 12px !important;
+}
+
+.anime-poster {
+    border-radius: 12px !important;
+    object-fit: contain !important;
+    background-color: #1e1e1e;
+    width: 100%;
+    display: block;
+}
+
+.no-poster {
+    border-radius: 12px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6a6a6a;
+    font-size: 14px;
+    background-color: #1e1e1e !important;
+}
+
+/* Для разных режимов отображения */
+.view-1 .anime-poster,
+.view-1 .no-poster {
+    height: 350px;
+}
+
+.view-4 .anime-poster,
+.view-4 .no-poster {
+    height: 300px;
+}
+
+.view-auto .anime-poster,
+.view-auto .no-poster {
+    height: 250px;
+}
+
+/* Исправления для постеров */
+.anime-poster-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border-radius: 12px !important;
+    background-color: #1e1e1e;
+    margin: 0 auto; /* Центрирование */
+}
+
+.anime-poster {
+    border-radius: 12px !important;
+    object-fit: contain !important;
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin: 0 auto; /* Центрирование */
+}
+
+.no-poster {
+    border-radius: 12px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6a6a6a;
+    font-size: 14px;
+    background-color: #1e1e1e !important;
+    width: 100%;
+    height: 100%;
+}
+
+/* Для разных режимов отображения */
+.view-1 .anime-poster-link {
+    height: 350px;
+    width: 250px;
+}
+
+.view-4 .anime-poster-link {
+    height: 300px;
+    width: 100%;
+}
+
+.view-auto .anime-poster-link {
+    height: 250px;
+    width: 100%;
+}
+
+/* Центрирование контента в карточках */
+.view-4 .anime-item,
+.view-auto .anime-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+/* Гарантируем, что контейнеры не будут сжимать постеры */
+.anime-poster-link, .anime-poster, .no-poster {
+    flex-shrink: 0;
+}
+
+/* ============= ГЛАВНАЯ СТРАНИЦА ============= */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 20px 25px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.view-all {
+    color: #3ea6ff;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.view-all:hover {
+    opacity: 0.8;
+    text-decoration: underline;
+}
+
+/* ============= ГЛАВНАЯ СТРАНИЦА ============= */
+.section-header {
+    margin: 0 20px 25px;
+    padding-top: 20px;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    padding-left: 30px;
+}
+
+.carousel-container {
+    position: relative;
+    padding: 0 70px; /* Увеличено для пространства */
+    margin-bottom: 60px;
+}
+
+.carousel-wrapper {
+    overflow: visible; /* Разрешаем выходить за границы */
+    padding: 30px 0; /* Больше пространства сверху/снизу */
+}
+
+.carousel {
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    padding: 30px 0; /* Больше пространства */
+    margin: 0 -50px; /* Компенсируем padding */
+}
+
+.carousel::-webkit-scrollbar {
+    display: none;
+}
+
+.carousel-item {
+    flex: 0 0 280px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    background: #1e1e1e;
+    z-index: 1;
+    margin: 0 10px; /* Отступы между карточками */
+}
+
+.carousel-item:hover {
+    transform: translateY(-10px) scale(1.05); /* Уменьшил поднятие */
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+.carousel-poster {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+    display: block;
+}
+
+.no-poster {
+    height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1e1e1e;
+    color: #6a6a6a;
+    font-size: 1.1rem;
+}
+
+.carousel-info {
+    padding: 18px;
+    background: #1e1e1e;
+}
+
+.carousel-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 8px;
+    white-space: normal;
+    height: auto;
+    display: block;
+    line-height: 1.4;
+}
+
+.carousel-rating {
+    color: #FFD700;
+    font-weight: 500;
+    margin-left: 8px;
+    display: inline;
+}
+
+.carousel-meta {
+    display: flex;
+    gap: 15px;
+    font-size: 0.9rem;
+    color: #b0b0b0;
+}
+
+.carousel-season {
+    color: #b0b0b0;
+}
+
+.carousel-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: rgba(30, 30, 30, 0.85);
+    border: 1px solid #3b82f6;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    transition: all 0.3s;
+}
+
+.carousel-nav:hover {
+    background: #3b82f6;
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-prev {
+    left: 10px;
+}
+
+.carousel-next {
+    right: 10px;
+}
+
+.genre-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 20px 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3b82f6;
+}
+
+.genre-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #3b82f6;
+    letter-spacing: -0.5px;
+}
+
+.genre-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.carousel-item a {
+    text-decoration: none !important;
+}
+
+
+
+/* Исправляем кнопку ответов */
+
+
+.post-player-ad {
+    margin: 25px 0;
+    padding: 15px;
+    background: #1a1a1a;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Для подвала */
+.footer-ad {
+    margin-top: 40px;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: center;
+}
+
+
+
+.footer-ad {
+    margin-top: 40px;
+    padding: 20px;
+    background: #1a1a1a;
+    border-radius: 12px 12px 0 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer-ad > ins {
+    margin: 0 auto;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    /* Важные стили для принудительного применения */
+
+    /* Уменьшение всего контента */
+    * {
+        font-size: 14px !important;
+        line-height: 1.3 !important;
+    }
+
+    h1, h2, h3 {
+        font-size: 1.2em !important;
+        margin: 5px 0 !important;
+    }
+
+
+    .read-more-btn {
+        display: block !important;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 5px;
+        border-radius: 4px;
+        margin-top: 5px;
+        width: 100%;
+    }
+
+    /* Плеер */
+
+    /* Комментарии */
+
+    /* Реклама */
+    .post-player-banner,
+    .footer-ad {
+        transform: scale(0.9);
+        transform-origin: center;
+        overflow: hidden;
+        max-width: 100%;
+        padding: 5px !important;
+        margin: 5px 0 !important;
+    }
+
+
+    .read-more-btn {
+        display: block !important;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 8px;
+        border-radius: 4px;
+        margin-top: 10px;
+        cursor: pointer;
+        width: 100%;
+    }
+
+        .ad-container {
+        overflow: hidden;
+        width: 100%;
+        min-height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #1e1e1e;
+        border-radius: 8px;
+        margin: 10px 0;
+    }
+
+    .ad-container ins {
+        width: 100%;
+        height: 100px;
+    }
+}
+
+.ad-container {
+    overflow: hidden;
+    max-width: 100%;
+    text-align: center;
+}
+
+.ad-banner {
+    margin: 0 auto;
+    display: inline-block;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    .ad-container {
+        transform: scale(0.85);
+        transform-origin: center;
+        margin: 5px 0;
+        padding: 0;
+    }
+
+    /* Принудительная загрузка мобильной рекламы */
+    .ad-banner {
+        min-width: 320px;
+        min-height: 100px;
+        background: #1e1e1e;
+        border-radius: 8px;
+    }
+
+    /* Специальные стили для мобильных */
+    .ad-banner::after {
+        content: "Реклама загружается...";
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #6a6a6a;
+        font-size: 14px;
+        height: 100px;
+    }
+
+    .ad-banner > iframe {
+        min-width: 320px !important;
+        min-height: 100px !important;
+        max-width: 100vw !important;
+    }
+
+
+    /* Уменьшение размеров франшизы */
+}
+
+.navbar, .logo-container, .search-container {
+     display: flex;
+     align-items: center;
+}
+
+.hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+
+
+
+
+    #load-more {
+        display: block;
+        margin: 30px auto;
+        padding: 12px 35px;
+        border-radius: 25px;
+        color: white;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        max-width: 300px;
+        text-align: center;
+    }
+
+    #load-more:hover {
+        background-color: #3a6595;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    #load-more:disabled {
+        opacity: 0.7;
+        cursor: wait;
+    }
+
+.navbar {
+    z-index: 2000 !important;
+}
+
+/* Убеждаемся что мобильное меню также поверх всего */
+.mobile-menu {
+    z-index: 1999 !important;
+}
+
+/* Для страницы деталей аниме - увеличиваем z-index контента чтобы не перекрывался */
+main {
+    position: relative;
+    z-index: 1;
+}

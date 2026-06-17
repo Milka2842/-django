@@ -9,29 +9,26 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-from dotenv import load_dotenv
 from pathlib import Path
 import os
-import re
-import locale
 import sys
+
+# Загружаем переменные окружения из .env (если есть)
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv()
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
+load_dotenv()  # загружаем .env
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-temp-key-for-demo-only')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-AUTH_USER_MODEL = 'users.CustomUser'
-# Application definition
+ALLOWED_HOSTS = ['*']  # для разработки разрешаем все хосты
 
+# Application definition
 INSTALLED_APPS = [
     'humanize',
     'anime',
@@ -81,172 +78,171 @@ TEMPLATES = [
     },
 ]
 
-SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 WSGI_APPLICATION = 'yume.wsgi.application'
 
-# 30 дней (в секундах)
-SESSION_COOKIE_AGE = 30 * 24 * 60 * 60  # 2592000 секунд
-
-USE_WEBP = True
-WEBP_QUALITY = 85
-IMAGE_CACHE_TIMEOUT = 86400 * 30
-
-# Не завершать сессию при закрытии браузера
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-
-# Обновлять время сессии при каждом действии пользователя
-SESSION_SAVE_EVERY_REQUEST = True
-
-LOGIN_URL = '/users/login/'
-LOGIN_REDIRECT_URL = 'anime:home'  # Куда перенаправлять после входа
-LOGOUT_REDIRECT_URL = 'anime:home'  # Куда перенаправлять после выхода
-
-# Database
-# https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+# ========== БАЗА ДАННЫХ (SQLite для разработки) ==========
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'anime_db',  # Только строка!
-        'USER': 'postgres',
-        'PASSWORD': os.getenv("PASSWORD"),
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
+# ========== КЕШ (отключён для простоты) ==========
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
-        'LOCATION': '127.0.0.1:11211',
-        'TIMEOUT': 86400,  # 24 часа
-        'OPTIONS': {
-            'no_delay': True,
-            'ignore_exc': True,
-            'max_pool_size': 4,
-            'use_pooling': True,
-        }
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
-"""
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
-]
-"""
-AUTH_PASSWORD_VALIDATORS = []
+# ========== ПАРОЛИ И АУТЕНТИФИКАЦИЯ ==========
+AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_PASSWORD_VALIDATORS = []  # упрощаем для разработки
+LOGIN_URL = '/users/login/'
+LOGIN_REDIRECT_URL = 'anime:home'
+LOGOUT_REDIRECT_URL = 'anime:home'
+SESSION_COOKIE_AGE = 30 * 24 * 60 * 60
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.1/topics/i18n/
-
+# ========== ИНТЕРНАЦИОНАЛИЗАЦИЯ ==========
 LANGUAGE_CODE = 'ru'
-
 TIME_ZONE = 'Europe/Moscow'
-
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-LOCALE_PATHS = [
-    BASE_DIR / 'locale',
-]
+LOCALE_PATHS = [BASE_DIR / 'locale']
 
-# Для Windows
+# Для Windows (если запуск на Windows)
 if sys.platform.startswith('win'):
+    import locale
     locale.setlocale(locale.LC_ALL, 'Russian_Russia.1251')
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
-
+# ========== СТАТИЧЕСКИЕ ФАЙЛЫ ==========
 STATIC_URL = '/static/'
-
-# В режиме разработки Django сам раздает статику из STATICFILES_DIRS
 if DEBUG:
-    STATICFILES_DIRS = [
-        BASE_DIR / 'static',  # Статика приложения anime
-        # Добавьте сюда другие приложения, если нужно
-    ]
-    STATIC_ROOT = None  # В разработке не используем STATIC_ROOT
+    STATICFILES_DIRS = [BASE_DIR / 'static']
+    STATIC_ROOT = None
 else:
-    # В продакшене собираем всю статику в STATIC_ROOT
-    STATICFILES_DIRS = []  # В продакшене должен быть пустым
-    STATIC_ROOT = BASE_DIR / 'static'  # Nginx будет раздавать из этой папки
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+    STATICFILES_DIRS = []
+    STATIC_ROOT = BASE_DIR / 'static'
 
+# ========== МЕДИА ==========
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# ========== ПОЛЯ ПО УМОЛЧАНИЮ ==========
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# ========== MIME-ТИПЫ ДЛЯ JS ==========
 import mimetypes
 mimetypes.add_type('application/javascript', '.js')
 mimetypes.add_type('text/javascript', '.js')
 
+# ========== CORS (упрощено для разработки) ==========
 CORS_ALLOWED_ORIGINS = [
-    "http://yamu.su",
-    "https://yamu.su",
-    "http://www.yamu.su",
-    "https://www.yamu.su",
-    "http://149.154.67.159",
-    "https://149.154.67.159",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://*.github.dev",
+    "https://*.githubpreview.dev",
 ]
+CORS_ALLOW_ALL_ORIGINS = True  # для разработки (в продакшене убрать)
 
+# ========== CSRF ==========
 CSRF_TRUSTED_ORIGINS = [
-    "http://yamu.su",
-    "https://yamu.su",
-    "http://www.yamu.su",
-    "https://www.yamu.su",
-    "http://149.154.67.159",
-    "https://149.154.67.159",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "https://*.github.dev",
+    "https://*.githubpreview.dev",
 ]
-# Медиа-файлы
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
 
-# Дополнительные настройки
-
+# ========== БЕЗОПАСНОСТЬ (упрощено для разработки) ==========
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+SECURE_PROXY_SSL_HEADER = None
+USE_X_FORWARDED_HOST = False
+SECURE_HSTS_SECONDS = 0
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_HSTS_PRELOAD = False
 SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None
+X_FRAME_OPTIONS = 'DENY'
+SECURE_BROWSER_XSS_FILTER = False
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# ========== ЗАГОЛОВКИ БЕЗОПАСНОСТИ ==========
+def SEOHeadersMiddleware(get_response):
+    def middleware(request):
+        response = get_response(request)
+        response['Permissions-Policy'] = 'accelerometer=(), gyroscope=(), encrypted-media=()'
+        response['Referrer-Policy'] = 'strict-origin-when-cross-origin'
+        return response
+    return middleware
+
+# ========== CELERY (ОТКЛЮЧЁН) ==========
+# Для демонстрации просто задаём фиктивные значения, чтобы не было ошибок импорта
+CELERY_BROKER_URL = 'memory://'
+CELERY_RESULT_BACKEND = 'cache+memory://'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Moscow'
+CELERY_TASK_ALWAYS_EAGER = True  # выполнять задачи синхронно
+CELERY_BEAT_SCHEDULE = {}
+
+# ========== RECAPTCHA (заглушки) ==========
+RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY', 'dummy')
+RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', 'dummy')
+RECAPTCHA_REQUIRED_SCORE = 0.85
+
+# ========== EMAIL (фиктивный вывод в консоль) ==========
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'test@gmail.com'
+EMAIL_HOST_PASSWORD = 'dummy'
+DEFAULT_FROM_EMAIL = 'test@gmail.com'
+
+# ========== ДРУГИЕ НАСТРОЙКИ ==========
+SITE_ID = 1
+APPEND_SLASH = False
 DEFAULT_CHARSET = 'utf-8'
 FILE_CHARSET = 'utf-8'
-CELERY_TASK_ALWAYS_EAGER = False
-LANGUAGES = [
-    ('ru', 'Russian'),
-    ('en', 'English'),
-]
+ROBOTS_INDEX = True
+SITE_DOMAIN = "localhost:8000"
+SITE_LOGO = "https://yamu.su/static/img/logo.png"
 
-LOCALE_PATHS = [BASE_DIR / 'locale']
+# ========== НАСТРОЙКИ ДЛЯ АНИМЕ (отключаем внешние сервисы) ==========
+USE_WEBP = True
+WEBP_QUALITY = 85
+IMAGE_CACHE_TIMEOUT = 86400 * 30
+IMAGE_OPTIMIZATION = {
+    'jpeg_quality': 85,
+    'png_quality': 85,
+    'webp_quality': 80,
+    'max_width': 1920,
+}
+RATING_UPDATE_BATCH_SIZE = 15
+RATING_UPDATE_INTERVAL = 600
 
+# Убираем Google Indexing API (заглушка)
+GOOGLE_INDEXING_API_JSON_KEY_PATH = ''
+GOOGLE_INDEXING_API_SERVICE_ACCOUNT_EMAIL = ''
+GOOGLE_INDEXING_PRIVATE_KEY = ''  # удаляем настоящий ключ
+
+# Убираем Яндекс OAuth
+YANDEX_OAUTH_TOKEN = ''  # удаляем настоящий токен
+
+# Логирование (вывод в консоль)
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
-        },
-        'file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': 'django_debug.log',
-            'maxBytes': 500 * 1024 * 1024,  # 500 MB
-            'backupCount': 3,
-        },
-    },
-    'loggers': {
-        'django': {
-            'handlers': ['console', 'file'],
-            'level': 'INFO',
-            'propagate': True,
         },
     },
     'root': {
@@ -255,136 +251,7 @@ LOGGING = {
     },
 }
 
-RATING_UPDATE_BATCH_SIZE = 15
-RATING_UPDATE_INTERVAL = 600
-
-CELERY_BEAT_SCHEDULE = {
-    'update-ratings-periodically': {
-        'task': 'anime.tasks.update_ratings_task',
-        'schedule': 600,  # 10 минут
-    },
-    'update-ongoing': {
-        'task': 'anime.tasks.update_ongoing_anime',
-        'schedule': 21600,  # 6 часов (21600 секунд)
-        'options': {'timezone': 'Europe/Moscow'},
-    },
-    'update-incomplete': {
-        'task': 'anime.tasks.update_incomplete_anime',
-        'schedule': 86400,  # 24 часа
-        'options': {'timezone': 'Europe/Moscow'},
-    },
-    'ping-every-5-min': {
-        'task': 'anime.tasks.ping',
-        'schedule': 300,  # 5 минут
-    },
-}
-
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
-
-CELERY_RESULT_BACKEND = 'rpc://'  # Для хранения результатов задач
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-
-
-
-RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
-RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-GMAIL_CREDENTIALS_PATH = os.path.join(BASE_DIR, 'credentials', 'credentials.json')
-EMAIL_HOST_USER = 'yamu.verufication@gmail.com'
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # Пароль приложения из Gmail
-DEFAULT_FROM_EMAIL = 'yamu.verufication@gmail.com'
-
-
-
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'yamu.su', 'www.yamu.su', 'testserver']
-
-AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
-]
-
-CSRF_COOKIE_HTTPONLY = False  # Для доступа через JavaScript
-SITE_ID = 1
-
-RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
-RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
-RECAPTCHA_REQUIRED_SCORE = 0.85  # Минимальный порог доверия
-
-# Настройки безопасности
-CSRF_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_SAMESITE = 'Lax'
-
-SECURE_HSTS_SECONDS = 31536000  # HSTS (1 год)
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-# SECURE_REFERRER_POLICY перенесен выше в доп. настройки
-
-
-CSP_IMG_SRC = ("'self'", "data:", "http:", "https:")
-CSP_DEFAULT_SRC = ("'self'", "http:", "https:")
-
-IMAGE_PROXY_FORMATS = {
-    'webp': 'image/webp',
-    'jpg': 'image/jpeg',
-}
-SITE_DOMAIN = "yamu.su"
-ROBOTS_INDEX = True
-
-GOOGLE_INDEXING_API_JSON_KEY_PATH = os.path.join(BASE_DIR, 'credentials', 'index.json')
-GOOGLE_INDEXING_API_SERVICE_ACCOUNT_EMAIL = 'yamu-444@yume-460120.iam.gserviceaccount.com'
-
-GOOGLE_INDEXING_PRIVATE_KEY = """-----BEGIN PRIVATE KEY-----
-MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCbBSW8n5gBZf7I
-jiqBo62pxCXg83Np1lCc/fC0p8PDyrvC5KxTRjj4cEJq3l7hBoWoaQhZ1Tl9cUJk
-EH7npoVnJQ/Eeakh+JmI9Qt2GjTIwmaE51bYqBn6mOXzt3qtEedcI9zgQPxZb610
-t2Ip2289MNVsHD7IWssbY/8XtH4IjPMscjel0QDfyOMS090s/GrFK7YKk6Iagaap
-8ZD2e/7oV06SI6K7aZayYR0B5bzobmzMm8oeOs/bYQzi2IGDj6WUEkOIp0n5RjX/
-NDllE2RAn3oG+XP5nxpZxAyNsvkhpT+9MwemuTViq5WzYTc6N7+k+Yyf/yaLP/s3
-hHAoDGF1AgMBAAECggEAAXkZTHNMx7ifJOs66qvyPsJ7JKnTjy4m6nL8Sk8szEu9
-IIM5QvpQGMZCT08pIiTEeN70ohvlVbSRj69bcVqS+nGu9mw8h/LbjKJdd0QU+9Jj
-FIC5QcpJIuk4iCoWa5YXt3esxeHANB5cTNdgQqsP4co4wPP8wb0hIHPBDQndR7oB
-XMS+zmb+gBfcIomEeQFSARPug1Iu1JFBE00wlWZY/nzQU86B3CMaPocdsD9wAL57
-WC4djMk8vSU8NLikxM87fuJRwqN0UIAPj4ZigK13eFkMQaX5mf981yK9FWISuVuU
-hvicuiqH4OfgyZmRKOa6bmRIbX1j9WEtCPjazfeaiQKBgQDOIP91MUgyhZHa0xef
-PvUfW7tcMdFyBTk9yxO6Um94kp1mOk8eVAQaaAQaplyk7V7M99dv0pwhwe/o5X5V
-t1tOTD5ba10eLJMk6e1QZGgyibN072DgeVM1AxLVUSBsM4oDQpmIq+E7B93E4EmZ
-DD2+Fhsp2A0+EmrJChi/LzJ8DQKBgQDAhqAM5xoprdMLyRN9VF6lLAI/OmmJssth
-9kq4FNDb6ECcwfTsjaRt867T9icNAy+m9VyQL/Wc/CnGy5IVAIONzbXWqSyXugvw
-DwfMTdyQ2l7FZZslPXWVidbXnEooCdT9Jsjk6n/9DYSqtLtt5Ac6wGsm9aZKZ05/
-6dflqdvZCQKBgQCKRHY3bWRph1FsQLcSug+BBm5qjHxbCIf6HFPSYuOlNGvim/Bg
-fqj18Zn3Kmrwss0pnoJj3xmeR1IfnnmdE85qehhGCIHA8NOPKl9m0sNWSyoWoVAR
-ozCeWb5zWuTtz7CfOTh2Bh2iFEe9fVnBEQYFkRyNeACCB6abzmsFK6qorQKBgDGN
-dPxdLxqzJrLN2jpT0Nhqb1meyzMp1bctESY4FVnEeXzfXw7TlhLGuaTMolhzDXzH
-gj+KWIlDTe1g0ASf0TxaSgcqG9QhipkLBVLMZ4zQ57ue30PCgdUvWSC9lUig3zUZ
-GnPw92hGZnMZeXRbUJEKnYm1iEt2M3ow0eTGx1MhAoGBALXZaz39Wnv7M9D/YJX9
-JiFh0uweBl3nvE9Je1eRScSBgw785edyRaIM7R744FdE6+FVdF3WSRf6uWV+z/Yh
-UhwrsWqnC0xpoM96RzBGmGAJgpNBkzHo2ZzhMd/4dtFqtYIpck+dfd9nRY/f4voX
-mdKAC8p+q3YmKrK0mqA9D2vp
------END PRIVATE KEY-----"""
-
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Europe/Moscow'
-APPEND_SLASH = True
-YANDEX_OAUTH_TOKEN = "y0__xDWm6eRBhj85Dggnt693xPt7YAKg03vXZIg64UMaMitFIcRvQ"  # Получить: https://oauth.yandex.ru/
-
-BROKER_HEARTBEAT = 30  # Отправлять пинг каждые 30 секунд
-BROKER_HEARTBEAT_CHECKRATE = 2  # Проверять соединение каждые 2 секунды
-
-SECURE_SSL_REDIRECT = False   # Включить принудительное перенаправление HTTPS
-SESSION_COOKIE_SECURE = True  # Куки сессии только через HTTPS
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')  # Уже правильно
-USE_X_FORWARDED_HOST = True  # Уже правильно
-
-APPEND_SLASH = False  # Отключите автоматическое добавление слеша
-DEFAULT_CHARSET = 'utf-8'
-
+# Дополнительные настройки безопасности (CSP) — упрощаем
 CSP_DEFAULT_SRC = ("'self'",)
 CSP_SCRIPT_SRC = ("'self'", "https://kodik-add.com")
 CSP_IMG_SRC = ("'self'", "data:")
@@ -392,41 +259,31 @@ CSP_FRAME_SRC = ("'self'", "https://kodik-add.com")
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'")
 CSP_CONNECT_SRC = ("'self'",)
 
-# Блокировка нежелательных функций браузера
-SECURE_BROWSER_XSS_FILTER = False
-SECURE_CONTENT_TYPE_NOSNIFF = True
-X_FRAME_OPTIONS = 'DENY'  # Запрещаем встраивание в iframe
-# Дополнительные заголовки безопасности
-def SEOHeadersMiddleware(get_response):
-    def middleware(request):
-        response = get_response(request)
-        # Блокируем нежелательные функции
-        response['Permissions-Policy'] = 'accelerometer=(), gyroscope=(), encrypted-media=()'
-        response['Referrer-Policy'] = 'strict-origin-when-cross-origin'
-        return response
-    return middleware
+# Настройки сессий и кук
+CSRF_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'Lax'
 
-BROKER_TRANSPORT_OPTIONS = {
-    'visibility_timeout': 43200,  # 12 часов
-    'socket_timeout': 30,
-    'retry_on_timeout': True,
-}
+# ---------- Регистрация JSON-функций для SQLite (для локальной разработки) ----------
+from django.db.backends.signals import connection_created
+from django.dispatch import receiver
 
+@receiver(connection_created)
+def setup_sqlite_json_functions(sender, connection, **kwargs):
+    if connection.vendor == 'sqlite':
+        import json
+        import sqlite3
 
-CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
-CELERY_TASK_ACKS_LATE = True
-CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+        def jsonb_array_length(json_str):
+            """Возвращает длину JSON-массива или 0, если данные не массив."""
+            if not json_str:
+                return 0
+            try:
+                data = json.loads(json_str)
+                if isinstance(data, list):
+                    return len(data)
+                return 0
+            except (json.JSONDecodeError, TypeError):
+                return 0
 
-WEBP_QUALITY = 80  # Уменьшите качество для меньшего размера
-IMAGE_OPTIMIZATION = {
-    'jpeg_quality': 85,
-    'png_quality': 85,
-    'webp_quality': 80,
-    'max_width': 1920,  # Максимальная ширина изображений
-}
-
-SITE_LOGO = "https://yamu.su/static/img/logo.png"
-
-UWSGI_READ_TIMEOUT = 6000  # 10 минут
-UWSGI_SOCKET_TIMEOUT = 6000
-
+        connection.connection.create_function("jsonb_array_length", 1, jsonb_array_length)
+        print("✅ Зарегистрирована функция jsonb_array_length для SQLite")

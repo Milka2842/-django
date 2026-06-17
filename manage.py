@@ -17,7 +17,10 @@ def main():
         ) from exc
     execute_from_command_line(sys.argv)
 
-locale.setlocale(locale.LC_ALL, 'Russian_Russia.1251')
+try:
+    locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
+except locale.Error:
+    locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 if __name__ == '__main__':
     main()
